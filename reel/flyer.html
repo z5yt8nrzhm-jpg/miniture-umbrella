@@ -16,7 +16,7 @@ canvas{display:block}
 <script>
 // Static vertical flyer; only the little town moves: ladies walk to their stores,
 // and each one that goes inside rolls out a mat and drops a pillow.
-const W = 1080, H = 1920, DURATION = 12;
+const W = 1080, H = 1920, DURATION = 13;
 const GROUND = 1640, WALK_Y = 1664;
 const c = document.getElementById('c'), ctx = c.getContext('2d');
 const C = { cream: '#F4EFE6', char: '#4A4F4A', soft: '#8A877F', terra: '#B0714F', line: '#D3C9BA',
@@ -68,10 +68,10 @@ function icon(kind, x, y, r = 1, ring = true) {
   ctx.restore();
 }
 
-function card() {
+function card(t) {
   ctx.fillStyle = C.cream; ctx.fillRect(0, 0, W, H);
   const g = ctx.createRadialGradient(540, 1520, 0, 540, 1520, 620);
-  g.addColorStop(0, 'rgba(250,224,170,0.55)'); g.addColorStop(1, 'rgba(250,224,170,0)');
+  g.addColorStop(0, `rgba(250,224,170,${0.12 + 0.43 * ease(seg(t, 0.3, 1.9))})`); g.addColorStop(1, 'rgba(250,224,170,0)');
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
 
   // logo + partner
@@ -197,25 +197,33 @@ function building(x, w, h, type, t) {
   ctx.strokeRect(DOOR + 22, GROUND - 62, x + w - 10 - (DOOR + 22), 40);
   for (let k = 0; k < 7; k++) { ctx.fillStyle = k % 2 ? C.bldg : '#B9C4B2'; ctx.fillRect(x + 6 + k * (w - 12) / 7, GROUND - 84, (w - 12) / 7, 14); }
   ctx.strokeRect(x + 6, GROUND - 84, w - 12, 14);
-  ctx.fillStyle = '#F6F2EB'; rr(DOOR - 46, GROUND - 116, 92, 24, 4); ctx.fill(); ctx.stroke();
-  text('flex studio', DOOR, GROUND - 98, { font: 'italic 600 19px Corm', color: '#8C8579' });
   const open = doorOpen(t);
   ctx.fillStyle = shade('#B9C4B2', -0.3 * open - 0.02); ctx.fillRect(DOOR - 17, GROUND - 58, 34, 58);
   ctx.fillStyle = C.bldg; ctx.fillRect(DOOR - 17, GROUND - 58, 34 * (1 - open * 0.8), 58);
   ctx.strokeRect(DOOR - 17, GROUND - 58, 34, 58);
   ctx.fillStyle = C.bldgLine; ctx.beginPath(); ctx.arc(DOOR + 10 - open * 26, GROUND - 28, 2.5, 0, 7); ctx.fill();
 }
-function lights() {
+const BULB_ON = i => 0.25 + i * 0.075;
+function bulbLevel(i, t) {
+  const d = t - BULB_ON(i);
+  if (d < 0) return 0;
+  if (d < 0.26) return d < 0.07 ? 1 : d < 0.13 ? 0.15 : 1;   // pop, blink, on
+  return 0.82 + 0.18 * Math.sin(t * 2.4 + i * 1.9);
+}
+function lights(t) {
   const P = [[-20, 1388], [540, 1520], [1100, 1388]];
   ctx.strokeStyle = '#BDB2A2'; ctx.lineWidth = 2;
   ctx.beginPath(); ctx.moveTo(...P[0]); ctx.quadraticCurveTo(...P[1], ...P[2]); ctx.stroke();
   for (let i = 0; i < 19; i++) {
     const u = (i + 0.5) / 19, m = 1 - u;
     const x = m * m * P[0][0] + 2 * m * u * P[1][0] + u * u * P[2][0], y = m * m * P[0][1] + 2 * m * u * P[1][1] + u * u * P[2][1];
-    const g = ctx.createRadialGradient(x, y + 10, 0, x, y + 10, 34);
-    g.addColorStop(0, 'rgba(255,208,110,0.5)'); g.addColorStop(1, 'rgba(255,208,110,0)');
-    ctx.fillStyle = g; ctx.fillRect(x - 34, y - 24, 68, 68);
-    ctx.fillStyle = '#F6CF73'; ctx.beginPath(); ctx.ellipse(x, y + 9, 6, 8, 0, 0, 7); ctx.fill();
+    const lv = bulbLevel(i, t);
+    if (lv > 0) {
+      const g = ctx.createRadialGradient(x, y + 10, 0, x, y + 10, 36);
+      g.addColorStop(0, `rgba(255,208,110,${0.55 * lv})`); g.addColorStop(1, 'rgba(255,208,110,0)');
+      ctx.fillStyle = g; ctx.fillRect(x - 36, y - 26, 72, 72);
+    }
+    ctx.fillStyle = lv > 0.5 ? '#F6CF73' : '#E4DBCC'; ctx.beginPath(); ctx.ellipse(x, y + 9, 6, 8, 0, 0, 7); ctx.fill();
   }
 }
 function street() {
@@ -228,10 +236,10 @@ function street() {
 // ---------- the ladies ----------
 const SPEED = 150;
 const LADIES = [
-  { mat: 0, from: -40, start: 0.3, top: '#9DAE95', bot: '#5C615B', skin: '#E9C9AE', hair: '#B08E62', style: 'bun' },
-  { mat: 1, from: 1120, start: 1.2, top: '#D8BE9C', bot: '#6E716B', skin: '#B9876A', hair: '#4A3428', style: 'pony' },
-  { mat: 2, from: -40, start: 2.1, top: '#E3D6C3', bot: '#7A6A5C', skin: '#8E6550', hair: '#2E2420', style: 'long' },
-  { mat: 3, from: 1120, start: 3.0, top: '#C9886A', bot: '#4E524D', skin: '#DDB08E', hair: '#5A3A28', style: 'bob' },
+  { mat: 0, from: -40, start: 1.9, top: '#9DAE95', bot: '#5C615B', skin: '#E9C9AE', hair: '#B08E62', style: 'bun' },
+  { mat: 1, from: 1120, start: 2.8, top: '#D8BE9C', bot: '#6E716B', skin: '#B9876A', hair: '#4A3428', style: 'pony' },
+  { mat: 2, from: -40, start: 3.7, top: '#E3D6C3', bot: '#7A6A5C', skin: '#8E6550', hair: '#2E2420', style: 'long' },
+  { mat: 3, from: 1120, start: 4.6, top: '#C9886A', bot: '#4E524D', skin: '#DDB08E', hair: '#5A3A28', style: 'bob' },
 ];
 LADIES.forEach(l => {
   l.target = DOOR;
@@ -303,13 +311,21 @@ function matAndPillow(l, t) {
     ctx.beginPath(); ctx.moveTo(x - hw(MAT_TOP), MAT_TOP); ctx.lineTo(x + hw(MAT_TOP), MAT_TOP); ctx.lineTo(x + hw(y1), y1); ctx.lineTo(x - hw(y1), y1); ctx.closePath(); ctx.fill();
     if (p < 1) { ctx.fillStyle = shade(s.mat, -0.16); rr(x - hw(y1) - 3, y1 - 9, hw(y1) * 2 + 6, 9 + 14 * (1 - p), 8); ctx.fill(); }
   }
-  // pillow drops in, squashes, settles
+  // pillow drops in and bounces twice, squashing on each landing
   const q = seg(t, l.pillow, l.pillow + 0.32);
   if (q > 0) {
-    const restY = 1722;
-    let y = q < 1 ? lerp(restY - 120, restY, q * q) : restY;
-    const sq = t > l.pillow + 0.32 ? Math.exp(-(t - l.pillow - 0.32) * 9) * Math.cos((t - l.pillow - 0.32) * 26) : 0;
-    ctx.save(); ctx.translate(x, y); ctx.scale(1 + 0.16 * sq, 1 - 0.2 * sq); ctx.globalAlpha = ease(q * 3);
+    const restY = 1722, tl = t - l.pillow - 0.32;
+    let y = q < 1 ? lerp(restY - 150, restY, q * q) : restY, sq = 0;
+    if (tl >= 0) {
+      const hops = [[0.34, 38], [0.22, 14], [0.13, 4]];
+      let u = tl, k = 0;
+      while (k < hops.length && u > hops[k][0]) { u -= hops[k][0]; k++; }
+      if (k < hops.length) { const [d, h] = hops[k], f = u / d; y = restY - 4 * h * f * (1 - f); }
+      const impacts = [0, 0.34, 0.56, 0.69];
+      sq = impacts.reduce((a, ti, j) => a + (tl >= ti ? Math.exp(-(tl - ti) * 16) * [1, 0.6, 0.3, 0.15][j] : 0), 0);
+      if (k < hops.length && u > 0.05) sq -= 0.25 * Math.sin(Math.PI * u / hops[k][0]) * [1, 0.5, 0.2][k];
+    }
+    ctx.save(); ctx.translate(x, y); ctx.scale(1 + 0.22 * sq, 1 - 0.26 * sq); ctx.globalAlpha = ease(q * 3);
     ctx.fillStyle = 'rgba(80,60,40,0.12)'; ctx.beginPath(); ctx.ellipse(0, 16, 46, 9, 0, 0, 7); ctx.fill();
     ctx.fillStyle = shade(s.pillow, -0.18); ctx.beginPath(); ctx.ellipse(0, 9, 42, 15, 0, 0, 7); ctx.fill(); ctx.fillRect(-42, 0, 84, 9);
     ctx.fillStyle = s.pillow; ctx.beginPath(); ctx.ellipse(0, 0, 42, 15, 0, 0, 7); ctx.fill();
@@ -320,9 +336,9 @@ function matAndPillow(l, t) {
 }
 
 function render(t) {
-  card();
+  card(t);
   palm(118, 300, -12); palm(300, 240, 8);
-  lights();
+  lights(t);
   tower();
   palm(1040, 280, -8);
   BLD.forEach(([x, w, h, type]) => building(x, w, h, type, t));
