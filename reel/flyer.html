@@ -16,7 +16,7 @@ canvas{display:block}
 <script>
 // Static vertical flyer; only the little town moves: ladies walk to their stores,
 // and each one that goes inside rolls out a mat and drops a pillow.
-const W = 1080, H = 1920, DURATION = 13;
+const W = 1080, H = 1920, DURATION = 12;
 const GROUND = 1640, WALK_Y = 1664;
 const c = document.getElementById('c'), ctx = c.getContext('2d');
 const C = { cream: '#F4EFE6', char: '#4A4F4A', soft: '#8A877F', terra: '#B0714F', line: '#D3C9BA',
@@ -118,14 +118,16 @@ function card() {
 }
 
 // ---------- the little town (static parts) ----------
-const STORES = [
-  { door: 215, mat: '#8D918A', pillow: '#B97C5C', awn: '#C9B9A6' },
-  { door: 435, mat: '#A9B7A2', pillow: '#EFE6D6', awn: '#B9C4B2' },
-  { door: 650, mat: '#D9A47F', pillow: '#8FA58A', awn: '#DDBCA2' },
-  { door: 870, mat: '#9EA39B', pillow: '#E3C7A6', awn: '#BDBFB7' },
+// one studio door in the middle of Main Street; the mats fill in left to right
+const DOOR = 540;
+const MATS = [
+  { x: 215, mat: '#8D918A', pillow: '#B97C5C' },
+  { x: 435, mat: '#A9B7A2', pillow: '#EFE6D6' },
+  { x: 650, mat: '#D9A47F', pillow: '#8FA58A' },
+  { x: 870, mat: '#9EA39B', pillow: '#E3C7A6' },
 ];
-const BLD = [[10, 140, 200, 'court'], [160, 110, 150, 'store', 0], [270, 105, 212, 'step'], [380, 110, 162, 'store', 1],
-  [490, 105, 222, 'step'], [595, 110, 150, 'store', 2], [705, 110, 186, 'plain'], [815, 110, 160, 'store', 3], [925, 145, 204, 'step']];
+const BLD = [[10, 140, 200, 'court'], [160, 105, 150, 'plain'], [265, 110, 206, 'step'], [375, 105, 165, 'plain'],
+  [480, 120, 186, 'studio'], [600, 105, 206, 'step'], [705, 105, 150, 'plain'], [810, 112, 84, 'plain'], [922, 150, 92, 'plain']];
 
 function palm(x, h, lean) {
   const tx = x + lean, ty = GROUND - h;
@@ -139,19 +141,42 @@ function palm(x, h, lean) {
   });
 }
 function tower() {
-  const cx = 770, top = 1440;
-  ctx.strokeStyle = '#CBC0AF'; ctx.lineWidth = 3; ctx.fillStyle = C.bldg;
-  [[718, -26], [822, 26], [752, -6], [788, 6]].forEach(([x, d]) => { ctx.beginPath(); ctx.moveTo(x, top + 96); ctx.lineTo(x + d, GROUND); ctx.stroke(); });
+  // Gilbert water tower, as on the flyer: cone roof, tank, railed catwalk, lattice legs, ladder
+  const cx = 900, tankTop = 1392, tankBot = 1474, deck = 1486;
+  ctx.save();
+  ctx.strokeStyle = '#C6BBAA'; ctx.fillStyle = '#EAE3D7'; ctx.lineCap = 'round';
+  ctx.lineWidth = 3.5;
+  [[846, 824], [954, 976], [878, 872], [922, 928]].forEach(([a, b]) => { ctx.beginPath(); ctx.moveTo(a, deck); ctx.lineTo(b, GROUND); ctx.stroke(); });
   ctx.lineWidth = 2;
-  for (let y = top + 110; y < GROUND - 30; y += 60) { ctx.beginPath(); ctx.moveTo(712, y); ctx.lineTo(830, y + 60); ctx.moveTo(830, y); ctx.lineTo(712, y + 60); ctx.stroke(); }
+  for (let y = deck + 6; y < GROUND - 10; y += 36) {
+    const k0 = (y - deck) / (GROUND - deck), k1 = (y + 36 - deck) / (GROUND - deck);
+    const l0 = lerp(846, 824, k0), r0 = lerp(954, 976, k0), l1 = lerp(846, 824, k1), r1 = lerp(954, 976, k1);
+    ctx.beginPath(); ctx.moveTo(l0, y); ctx.lineTo(r1, y + 36); ctx.moveTo(r0, y); ctx.lineTo(l1, y + 36); ctx.moveTo(l0, y); ctx.lineTo(r0, y); ctx.stroke();
+  }
+  ctx.fillRect(cx - 6, tankBot, 12, GROUND - tankBot); ctx.strokeRect(cx - 6, tankBot, 12, GROUND - tankBot);
+  // ladder
+  ctx.lineWidth = 1.8;
+  ctx.beginPath(); ctx.moveTo(986, deck); ctx.lineTo(990, GROUND); ctx.moveTo(998, deck); ctx.lineTo(1002, GROUND);
+  for (let y = deck + 8; y < GROUND; y += 11) { const k = (y - deck) / (GROUND - deck); ctx.moveTo(986 + 4 * k, y); ctx.lineTo(998 + 4 * k, y); }
+  ctx.stroke();
+  // catwalk + railing
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(820, deck - 16); ctx.lineTo(1000, deck - 16);
+  for (let x = 820; x <= 1000; x += 12) { ctx.moveTo(x, deck - 16); ctx.lineTo(x, deck); }
+  ctx.stroke();
+  rr(814, deck, 192, 8, 2); ctx.fill(); ctx.stroke();
+  // tank
   ctx.lineWidth = 3;
-  rr(700, top, 140, 92, 5); ctx.fill(); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(693, top + 2); ctx.lineTo(cx, top - 40); ctx.lineTo(847, top + 2); ctx.closePath(); ctx.fill(); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(cx, top - 40); ctx.lineTo(cx, top - 58); ctx.stroke(); ctx.beginPath(); ctx.arc(cx, top - 62, 5, 0, 7); ctx.stroke();
-  rr(692, top + 92, 156, 9, 3); ctx.fill(); ctx.stroke();
-  text('GILBERT', cx, top + 58, { font: '600 26px Corm', color: '#B3A897', sp: 3 });
+  rr(836, tankTop, 128, tankBot - tankTop, 4); ctx.fill(); ctx.stroke();
+  ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(836, tankTop + 10); ctx.lineTo(964, tankTop + 10); ctx.moveTo(836, tankBot - 10); ctx.lineTo(964, tankBot - 10); ctx.stroke();
+  ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(826, tankTop + 2); ctx.lineTo(cx, tankTop - 36); ctx.lineTo(974, tankTop + 2); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx, tankTop - 36); ctx.lineTo(cx, tankTop - 56); ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx, tankTop - 61, 5, 0, 7); ctx.fill(); ctx.stroke();
+  text('GILBERT', cx, tankTop + 52, { font: '600 27px Corm', color: '#ADA291', sp: 3 });
+  ctx.restore();
 }
-function building(x, w, h, type, si, t) {
+function building(x, w, h, type, t) {
   const y = GROUND - h;
   ctx.fillStyle = C.bldg; ctx.strokeStyle = C.bldgLine; ctx.lineWidth = 2.5;
   if (type === 'court') {
@@ -164,22 +189,21 @@ function building(x, w, h, type, si, t) {
   if (type === 'step') { ctx.beginPath(); ctx.rect(x + w * 0.25, y - 22, w * 0.5, 22); ctx.fill(); ctx.stroke(); }
   ctx.beginPath(); ctx.rect(x, y, w, h); ctx.fill(); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(x - 5, y + 12); ctx.lineTo(x + w + 5, y + 12); ctx.stroke();
-  const n = 2, cell = (w - 20) / n;
+  const n = h >= 110 ? 2 : 0, cell = (w - 20) / 2;
   for (let i = 0; i < n; i++) ctx.strokeRect(x + 10 + i * cell + 5, y + 28, cell - 10, 32);
-  if (type !== 'store') { ctx.strokeRect(x + 10, GROUND - 70, w - 20, 64); return; }
-  // storefront: windows either side of a door, striped awning in the store's colour
-  const s = STORES[si], dx = s.door;
-  ctx.strokeRect(x + 10, GROUND - 62, dx - 22 - (x + 10), 40);
-  ctx.strokeRect(dx + 22, GROUND - 62, x + w - 10 - (dx + 22), 40);
-  ctx.fillStyle = s.awn;
-  for (let k = 0; k < 6; k++) { ctx.fillStyle = k % 2 ? C.bldg : s.awn; ctx.fillRect(x + 6 + k * (w - 12) / 6, GROUND - 84, (w - 12) / 6, 14); }
+  if (type !== 'studio') { ctx.strokeRect(x + 10, GROUND - 70, w - 20, 64); return; }
+  // the studio: windows either side of the door, sage striped awning, little sign
+  ctx.strokeRect(x + 10, GROUND - 62, DOOR - 22 - (x + 10), 40);
+  ctx.strokeRect(DOOR + 22, GROUND - 62, x + w - 10 - (DOOR + 22), 40);
+  for (let k = 0; k < 7; k++) { ctx.fillStyle = k % 2 ? C.bldg : '#B9C4B2'; ctx.fillRect(x + 6 + k * (w - 12) / 7, GROUND - 84, (w - 12) / 7, 14); }
   ctx.strokeRect(x + 6, GROUND - 84, w - 12, 14);
-  // door swings open while a lady walks in
-  const open = doorOpen(si, t);
-  ctx.fillStyle = shade(s.awn, -0.25 * open - 0.02); ctx.fillRect(dx - 17, GROUND - 58, 34, 58);
-  ctx.fillStyle = C.bldg; ctx.fillRect(dx - 17, GROUND - 58, 34 * (1 - open * 0.8), 58);
-  ctx.strokeRect(dx - 17, GROUND - 58, 34, 58);
-  ctx.fillStyle = C.bldgLine; ctx.beginPath(); ctx.arc(dx + 10 - open * 26, GROUND - 28, 2.5, 0, 7); ctx.fill();
+  ctx.fillStyle = '#F6F2EB'; rr(DOOR - 46, GROUND - 116, 92, 24, 4); ctx.fill(); ctx.stroke();
+  text('flex studio', DOOR, GROUND - 98, { font: 'italic 600 19px Corm', color: '#8C8579' });
+  const open = doorOpen(t);
+  ctx.fillStyle = shade('#B9C4B2', -0.3 * open - 0.02); ctx.fillRect(DOOR - 17, GROUND - 58, 34, 58);
+  ctx.fillStyle = C.bldg; ctx.fillRect(DOOR - 17, GROUND - 58, 34 * (1 - open * 0.8), 58);
+  ctx.strokeRect(DOOR - 17, GROUND - 58, 34, 58);
+  ctx.fillStyle = C.bldgLine; ctx.beginPath(); ctx.arc(DOOR + 10 - open * 26, GROUND - 28, 2.5, 0, 7); ctx.fill();
 }
 function lights() {
   const P = [[-20, 1388], [540, 1520], [1100, 1388]];
@@ -202,23 +226,22 @@ function street() {
 }
 
 // ---------- the ladies ----------
-const SPEED = 118;
+const SPEED = 150;
 const LADIES = [
-  { store: 0, from: -40, start: 0.5, top: '#9DAE95', bot: '#5C615B', skin: '#E9C9AE', hair: '#B08E62', style: 'bun' },
-  { store: 3, from: 1120, start: 1.5, top: '#D8BE9C', bot: '#6E716B', skin: '#B9876A', hair: '#4A3428', style: 'pony' },
-  { store: 1, from: -40, start: 2.6, top: '#E3D6C3', bot: '#7A6A5C', skin: '#8E6550', hair: '#2E2420', style: 'long' },
-  { store: 2, from: 1120, start: 3.6, top: '#C9886A', bot: '#4E524D', skin: '#DDB08E', hair: '#5A3A28', style: 'bob' },
+  { mat: 0, from: -40, start: 0.3, top: '#9DAE95', bot: '#5C615B', skin: '#E9C9AE', hair: '#B08E62', style: 'bun' },
+  { mat: 1, from: 1120, start: 1.2, top: '#D8BE9C', bot: '#6E716B', skin: '#B9876A', hair: '#4A3428', style: 'pony' },
+  { mat: 2, from: -40, start: 2.1, top: '#E3D6C3', bot: '#7A6A5C', skin: '#8E6550', hair: '#2E2420', style: 'long' },
+  { mat: 3, from: 1120, start: 3.0, top: '#C9886A', bot: '#4E524D', skin: '#DDB08E', hair: '#5A3A28', style: 'bob' },
 ];
 LADIES.forEach(l => {
-  l.target = STORES[l.store].door;
+  l.target = DOOR;
   l.arrive = l.start + Math.abs(l.target - l.from) / SPEED;
   l.inside = l.arrive + 0.45;
   l.matStart = l.inside + 0.1;
   l.pillow = l.matStart + 0.75;
 });
-function doorOpen(si, t) {
-  const l = LADIES.find(l => l.store === si);
-  return ease(seg(t, l.arrive - 0.35, l.arrive)) * (1 - ease(seg(t, l.inside + 0.1, l.inside + 0.45)));
+function doorOpen(t) {
+  return Math.max(...LADIES.map(l => ease(seg(t, l.arrive - 0.35, l.arrive)) * (1 - ease(seg(t, l.inside + 0.1, l.inside + 0.45)))));
 }
 function lady(l, t) {
   if (t < l.start || t > l.inside) return;
@@ -241,7 +264,7 @@ function lady(l, t) {
   ctx.strokeStyle = shade(l.skin, -0.12); ctx.lineWidth = 5;
   ctx.beginPath(); ctx.moveTo(0, -58); ctx.lineTo(sw * 8, -36); ctx.stroke();
   // rolled mat slung across the back
-  const mat = STORES[l.store].mat;
+  const mat = MATS[l.mat].mat;
   ctx.save(); ctx.translate(-9, -50); ctx.rotate(-0.55);
   ctx.fillStyle = mat; rr(-20, -6, 40, 12, 6); ctx.fill();
   ctx.fillStyle = shade(mat, -0.18); ctx.beginPath(); ctx.ellipse(20, 0, 3.5, 6, 0, 0, 7); ctx.fill(); ctx.restore();
@@ -272,7 +295,7 @@ function lady(l, t) {
 // ---------- mats + pillows ----------
 const MAT_TOP = 1684, MAT_BOT = 1786;
 function matAndPillow(l, t) {
-  const s = STORES[l.store], x = s.door;
+  const s = MATS[l.mat], x = s.x;
   const p = eOut(seg(t, l.matStart, l.matStart + 0.7));
   if (p > 0) {
     const y1 = lerp(MAT_TOP, MAT_BOT, p), hw = y => lerp(74, 100, (y - MAT_TOP) / (MAT_BOT - MAT_TOP));
@@ -298,17 +321,18 @@ function matAndPillow(l, t) {
 
 function render(t) {
   card();
-  palm(118, 300, -12); palm(300, 240, 8); palm(1010, 270, -10);
-  tower();
+  palm(118, 300, -12); palm(300, 240, 8);
   lights();
-  BLD.forEach(([x, w, h, type, si]) => building(x, w, h, type, si, t));
+  tower();
+  palm(1040, 280, -8);
+  BLD.forEach(([x, w, h, type]) => building(x, w, h, type, t));
   street();
   LADIES.forEach(l => matAndPillow(l, t));
   LADIES.forEach(l => lady(l, t));
 }
 
 window.render = render; window.DURATION = DURATION;
-window.CUES = LADIES.map(l => ({ store: l.store, pillow: l.pillow + 0.32, mat: l.matStart }));
+window.CUES = LADIES.map(l => ({ door: l.arrive, pillow: l.pillow + 0.32, mat: l.matStart }));
 Promise.all([document.fonts.load('italic 500 100px Corm'), document.fonts.load('600 100px Corm'),
   document.fonts.load('300 100px Mont'), document.fonts.load('600 100px Mont'),
   new Promise(r => { if (LOGO.complete) r(); else LOGO.onload = r; })]).then(() => { render(0); window.ready = true; });
