@@ -83,7 +83,7 @@ do $$ declare u record; i int; begin
 SQL
 CODE3A=$(Q -c "select tests.open_class('yoga_flow', now())")
 CODE3B=$(Q -c "select tests.open_class('stretch', now() + interval '5 minutes')")
-script "$TMP/s3.sql" "random(1, 100)" "insert into tests.race_log (member_n, status) select :n, public.check_in((array['$CODE3A','$CODE3B'])[1 + (random() * 1.99)::int]) ->> 'status';"
+script "$TMP/s3.sql" "random(1, 100)" "insert into tests.race_log (member_n, status) select :n, public.check_in((array['$CODE3A','$CODE3B'])[1 + floor(random() * 2)::int]) ->> 'status';"
 bench 60 100 "$TMP/s3.sql"
 check "every member reached 25 classes" \
   "select count(*) = 100 from (select c.member_id from public.checkins c join tests.load_users u on u.id = c.member_id group by 1 having count(*) = 25) t"
