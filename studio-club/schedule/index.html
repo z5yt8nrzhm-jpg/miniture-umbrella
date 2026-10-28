@@ -133,6 +133,14 @@ textarea{min-height:84px;resize:vertical}
 .out pre{white-space:pre-wrap;font:400 13.5px/1.5 var(--sans);margin:0;color:var(--deep);user-select:all}
 .row{display:flex;flex-wrap:wrap;gap:8px}
 .ok{font-size:13px;color:var(--clay);margin:0}
+
+.ig{display:flex;flex-direction:column;gap:10px}
+.ig .sec-title{margin-top:0}
+.igframe{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.igframe iframe{display:block;width:100%;height:520px;border:0;background:var(--card)}
+#ig-live:empty{display:none}
+#ig-live:not(:empty)+.igframe{display:none!important}
+#ig-live{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
 </style>
 
 <div class="wrap">
@@ -153,6 +161,13 @@ textarea{min-height:84px;resize:vertical}
       <p class="sub spread">yoga <span>·</span> pilates <span>·</span> wellness</p><p class="est">downtown gilbert · est. 2005</p>
       <div class="today" id="today" aria-live="polite"></div>
     </header>
+    <section class="ig" aria-label="Instagram">
+      <div class="sec-title"><span class="script">on instagram</span><small>@gilbertflexstudio</small></div>
+      <div id="ig-live"><!-- OPTIONAL: paste a live-feed widget's embed code here (Behold, LightWidget, SnapWidget...). When it is here, the built-in preview below hides itself. --></div>
+      <div class="igframe"><iframe src="https://www.instagram.com/gilbertflexstudio/embed" title="Gilbert Flex Studio on Instagram" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe></div>
+      <a class="btn ghost" href="https://www.instagram.com/gilbertflexstudio/" target="_blank" rel="noopener">follow us on instagram</a>
+    </section>
+
 
     <article class="feature" id="feature" aria-label="This week">
       <p class="eyebrow">this week at the studio</p>
