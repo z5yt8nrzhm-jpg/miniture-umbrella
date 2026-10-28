@@ -11,4 +11,7 @@ class AppConfig {
   static const url = String.fromEnvironment('SUPABASE_URL');
   static const key = String.fromEnvironment('SUPABASE_KEY');
   static bool get configured => url.isNotEmpty && key.isNotEmpty;
+
+  /// Where members book. Change it here if the studio moves booking platforms.
+  static const scheduleUrl = 'https://goteamup.com/p/6251849-gilbert-flex-studio/c/schedule';
 }

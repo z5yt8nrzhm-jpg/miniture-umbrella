@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 
 import '../data/models.dart';
+import '../links.dart';
 import '../state/club_controller.dart';
 import 'theme.dart';
 import 'widgets.dart';
@@ -42,6 +43,8 @@ class HomeScreen extends StatelessWidget {
             _Perks(stats: stats, catalog: c.catalog),
             const SectionTitle('Coming up'),
             _Schedule(classes: c.schedule, catalog: c.catalog),
+            const SizedBox(height: 12),
+            PrimaryButton('Book a class', icon: Icons.event_available_outlined, onPressed: () => openSchedule(context)),
             if (c.history.isNotEmpty) ...[
               const SectionTitle('Recent classes'),
               Paper(
