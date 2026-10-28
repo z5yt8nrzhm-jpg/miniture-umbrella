@@ -1,6 +1,7 @@
 // The staff and teacher desk in a phone-sized browser, against the real database
 // through server.cjs. Run: node desk.cjs [scenario]  (serve ../schedule at DESK_URL's origin)
 const { chromium } = require(process.env.PW_PATH || 'playwright');
+const jsQR = require('jsqr'); const { PNG } = require('pngjs');
 const API = 'http://127.0.0.1:54321', KEY = 'sb_publishable_local', DESK = process.env.DESK_URL || 'http://localhost:8768/studio.html';
 const post = async (path, body) => (await fetch(API + path, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body || {}) })).json();
 const sql = async (q, params) => { const r = await post('/__sql', { sql: q, params }); if (r.error) throw new Error(r.error); return r.rows; };
@@ -197,6 +198,24 @@ const scenarios = {
     await p.getByRole('button', { name: 'mark posted' }).click(); await p.waitForSelector('.card .chip.posted', { timeout: 5000 });
     check((await sql("select status from public.social_posts"))[0].status === 'posted', 'a planned post can be marked posted');
     check(await noOverflow(p), 'the social calendar fits a phone screen');
+  },
+  async qr(b) {
+    const p = await staffDesk(b);
+    const ev = (await sql(`insert into public.events (title, starts_at, published) values ('Deep Release', now() + interval '3 days', true) returning id`))[0].id;
+    const decode = async () => { const png = PNG.sync.read(await p.locator('#qrbox').screenshot()); const r = jsQR(new Uint8ClampedArray(png.data), png.width, png.height); return r && r.data; };
+    await tab(p, 'Events'); await p.waitForSelector('.card h3:text("Deep Release")');
+    await p.getByRole('button', { name: 'QR code', exact: true }).click(); await p.waitForSelector('#qrbox svg');
+    const got = await decode();
+    check(got === `http://localhost:8768/index.html?src=qr_deep-release#event=${ev}`, 'the event QR code scans to that event\'s sign-up page, tagged with its source (' + got + ')');
+    check(await noOverflow(p), 'the QR screen fits a phone screen');
+    await p.getByRole('button', { name: '‹ back' }).click(); await p.waitForSelector('.card h3:text("Deep Release")');
+    await p.getByRole('button', { name: 'QR for the links page' }).click(); await p.waitForSelector('#qrbox svg');
+    check((await decode()) === 'http://localhost:8768/index.html?src=qr_flyer', 'the links-page QR code scans to the page');
+    const dl = p.waitForEvent('download');
+    await p.getByRole('button', { name: /download image/ }).click();
+    const d = await dl; let svg = ''; for await (const c of await d.createReadStream()) svg += c;
+    check(svg.startsWith('<svg') && svg.includes('<path'), 'the downloaded image is a real SVG (' + d.suggestedFilename() + ')');
+    check(p.errs.length === 0, 'no page errors ' + p.errs.join('|'));
   },
   async phoneFit(b) {
     const p = await staffDesk(b);

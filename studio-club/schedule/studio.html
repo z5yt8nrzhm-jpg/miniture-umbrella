@@ -45,10 +45,13 @@ table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{text-align:left
 #toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);max-width:92vw;background:var(--ink);color:var(--onink);padding:10px 16px;border-radius:12px;font-size:14px;z-index:9}
 #toast.err{background:var(--bad);color:#fff}
 .center{max-width:420px;margin:12vh auto 0}
+.qrbox{background:#fff;border-radius:12px;padding:10px;display:inline-block;line-height:0}.qrbox svg{width:min(78vw,320px);height:auto;display:block}
+@media print{body *{visibility:hidden}#qrprint,#qrprint *{visibility:visible}#qrprint{position:absolute;left:0;top:0;width:100%;text-align:center}.qrbox svg{width:12cm}}
 </style></head>
 <body>
 <div class="wrap" id="app"></div>
 <div id="toast" role="status" aria-live="polite" hidden></div>
+<script src="vendor/qrcode.js"></script>
 <script id="gfs-config">window.GFS=window.GFS||{url:"",key:""};</script>
 <script>
 (function(){
@@ -175,12 +178,33 @@ function leadCard(l){
     det,h("div",{class:"row",style:"margin-top:10px"},note,l.status!=="seen"?mark("seen"):null,l.status!=="done"?mark("done"):null,l.status!=="spam"?mark("spam"):mark("new")));
 }
 
+/* ---------- QR codes ---------- */
+function qrSvg(text){
+  var qr=qrcode(0,"M");qr.addData(text);qr.make();
+  var n=qr.getModuleCount(),q=4,d="",NS="http://www.w3.org/2000/svg";
+  for(var r=0;r<n;r++)for(var c=0;c<n;c++)if(qr.isDark(r,c))d+="M"+(c+q)+" "+(r+q)+"h1v1h-1z";
+  var svg=document.createElementNS(NS,"svg");svg.setAttribute("viewBox","0 0 "+(n+2*q)+" "+(n+2*q));svg.setAttribute("xmlns",NS);svg.setAttribute("shape-rendering","crispEdges");svg.setAttribute("role","img");svg.setAttribute("aria-label","QR code for "+text);
+  var bg=document.createElementNS(NS,"rect");bg.setAttribute("width",n+2*q);bg.setAttribute("height",n+2*q);bg.setAttribute("fill","#fff");
+  var pa=document.createElementNS(NS,"path");pa.setAttribute("d",d);pa.setAttribute("fill","#000");
+  svg.append(bg,pa);return svg;
+}
+function showQr(main,title,url,back){
+  var svg=qrSvg(url);
+  put(main,h("div",{class:"row",style:"margin-bottom:10px"},h("button",{class:"btn ghost small",onclick:back,text:"‹ back"}),h("h2",{style:"margin:0",text:"QR code"})),
+    h("div",{id:"qrprint",class:"card",style:"text-align:center"},h("h3",{style:"margin-bottom:8px",text:title}),h("div",{class:"qrbox",id:"qrbox"},svg),h("p",{class:"muted",style:"overflow-wrap:anywhere",text:url})),
+    h("div",{class:"row"},h("button",{class:"btn small",onclick:function(){window.print()},text:"print"}),
+      h("button",{class:"btn ghost small",onclick:function(){var a=h("a",{href:URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svg)],{type:"image/svg+xml"})),download:"qr-"+title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+".svg"});document.body.append(a);a.click();a.remove()},text:"download image (SVG)"}),
+      h("button",{class:"btn ghost small",onclick:function(){copyText(url,"link copied")},text:"copy link"})),
+    h("p",{class:"muted",text:"anyone who scans this lands on the page, and their sign-up is tagged with where they came from."}));
+}
+function slugSrc(t){return (t||"x").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,30)||"x"}
+
 /* ---------- events ---------- */
 VIEW.events=function(main){
   loading(main);
   rpc("staff_events").then(function(list){
     list=list||[];
-    put(main,h("div",{class:"row",style:"margin-bottom:10px"},h("h2",{text:"events"}),h("span",{class:"sp"}),h("button",{class:"btn small",onclick:function(){eventForm(main,null)},text:"new event"})),
+    put(main,h("div",{class:"row",style:"margin-bottom:10px"},h("h2",{text:"events"}),h("span",{class:"sp"}),h("button",{class:"btn ghost small",onclick:function(){showQr(main,"Gilbert Flex links page",pageBase()+"?src=qr_flyer",function(){VIEW.events(main)})},text:"QR for the links page"}),h("button",{class:"btn small",onclick:function(){eventForm(main,null)},text:"new event"})),
       list.length?list.map(function(e){return eventCard(main,e)}):h("p",{class:"muted",text:"no events yet. add one and it appears on the public calendar once published."}));
   }).catch(function(e){loadFail(main,e,function(){VIEW.events(main)})});
 };
@@ -191,7 +215,8 @@ function eventCard(main,e){
     h("div",{class:"row"},h("h3",{text:e.title}),h("span",{class:"chip "+(e.published?"published":""),text:e.published?"published":"hidden"}),h("span",{class:"sp"}),h("span",{class:"muted",text:niceDate(e.starts_at)})),
     h("p",{class:"muted",text:[e.price,e.spots?e.signups+" of "+e.spots+" spots taken":e.signups+" signed up",e.attended?e.attended+" came":null,e.host?"with "+e.host:null].filter(Boolean).join(" · ")}),
     h("div",{class:"row"},h("button",{class:"btn ghost small",onclick:function(){eventForm(main,e)},text:"edit"}),h("button",{class:"btn ghost small",onclick:function(){signups(main,e)},text:"sign-ups"}),
-      h("button",{class:"btn ghost small",onclick:function(){copyText(link,"link copied. put it in a QR code or a story.")},text:"copy sign-up link"}),
+      h("button",{class:"btn ghost small",onclick:function(){showQr(main,e.title,link,function(){VIEW.events(main)})},text:"QR code"}),
+      h("button",{class:"btn ghost small",onclick:function(){copyText(link,"link copied. put it in a story or a message.")},text:"copy sign-up link"}),
       h("button",{class:"btn danger small",onclick:function(){if(!confirm("Delete this event? If people signed up it will only be hidden."))return;rpc("staff_delete_event",{p_id:e.id}).then(function(r){toast(r.status==="hidden"?"hidden (people had signed up)":"deleted");VIEW.events(main)}).catch(fail)},text:"delete"})));
 }
 function eventForm(main,e){

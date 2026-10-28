@@ -42,7 +42,7 @@ insert into public.staff (user_id) select id from auth.users where email = 'you@
 ```
 Everyone after that is added in the app: a teacher opens `studio.html` and signs in once, then a team member adds them under **Teachers** with their email.
 
-**Tracking what works:** add `?src=name` to any link you share (a partner, a flyer, an Instagram story) and every sign-up from it is tagged. The Audience tab shows which sources bring people and how many actually came. Event pages have a "copy sign-up link" button that tags it for you; put that link in a QR code.
+**Tracking what works:** add `?src=name` to any link you share (a partner, a flyer, an Instagram story) and every sign-up from it is tagged. The Audience tab shows which sources bring people and how many actually came. Every event has a **QR code** button (printable, or download as an image) and a link that tags it for you; there is also a QR for the links page itself.
 
 **Rules built in:** a form needs a phone or email; 5 per contact per hour and 300 per hour overall; a hidden field catches simple bots; people are only added to the audience if they tick "ok to send news"; the unsubscribe link removes them from every list; teachers can only touch their own posts and nothing goes public until the team approves it.
 

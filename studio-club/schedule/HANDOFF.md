@@ -7,7 +7,7 @@ For the person building or restyling the website. Everything here is plain HTML,
 | File | What it is | Safe to restyle? |
 |---|---|---|
 | `schedule/index.html` | The public links page: Instagram preview, schedule, calendar, forms, journal. One self-contained file. | Yes. Keep the element `id`s (the script looks them up) and the `rpc("...")` calls. |
-| `schedule/studio.html` | The private studio desk for the team and teachers (sign-in by emailed code). | Leave to us, or restyle only the CSS. It is not linked from the public page. |
+| `schedule/studio.html` | The private studio desk for the team and teachers (sign-in by emailed code). Keep the `vendor/` folder next to it: it holds the QR code library (MIT license, header kept in the file). | Leave to us, or restyle only the CSS. It is not linked from the public page. |
 | `supabase/` | The database, its safety rules and tests. | Do not edit by hand. Changes go in new migration files. |
 | `lib/` and the rest | The members club phone app (Flutter). | Separate project; link to it once it is published. |
 
