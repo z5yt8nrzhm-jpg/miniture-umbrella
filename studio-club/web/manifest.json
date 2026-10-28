@@ -1,0 +1,35 @@
+{
+    "name": "Gilbert Flex Club",
+    "short_name": "Flex Club",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#F4EFE6",
+    "theme_color": "#5C615B",
+    "description": "Gilbert Flex Studio members club: check in, earn badges and perks, and cheer each other on.",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "icons/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-maskable-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "icons/Icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}

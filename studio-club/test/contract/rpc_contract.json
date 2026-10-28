@@ -1,0 +1,106 @@
+{
+    "check_in": {
+        "args": [
+            "p_code"
+        ],
+        "required": 1
+    },
+    "is_staff": {
+        "args": [
+        ],
+        "required": 0
+    },
+    "my_stats": {
+        "args": [
+        ],
+        "required": 0
+    },
+    "wall_feed": {
+        "args": [
+            "p_before",
+            "p_before_id",
+            "p_limit"
+        ],
+        "required": 0
+    },
+    "wall_post": {
+        "args": [
+            "p_client_id",
+            "p_body"
+        ],
+        "required": 2
+    },
+    "my_history": {
+        "args": [
+            "p_limit"
+        ],
+        "required": 0
+    },
+    "wall_cheer": {
+        "args": [
+            "p_post",
+            "p_on"
+        ],
+        "required": 2
+    },
+    "wall_report": {
+        "args": [
+            "p_post"
+        ],
+        "required": 1
+    },
+    "staff_classes": {
+        "args": [
+            "p_day"
+        ],
+        "required": 0
+    },
+    "delete_my_account": {
+        "args": [
+        ],
+        "required": 0
+    },
+    "staff_redeem_perk": {
+        "args": [
+            "p_member_perk"
+        ],
+        "required": 1
+    },
+    "upsert_my_profile": {
+        "args": [
+            "p_name",
+            "p_favorite",
+            "p_avatar"
+        ],
+        "required": 1
+    },
+    "staff_create_class": {
+        "args": [
+            "p_class_type",
+            "p_starts_at",
+            "p_duration_min",
+            "p_instructor",
+            "p_capacity"
+        ],
+        "required": 4
+    },
+    "staff_flagged_posts": {
+        "args": [
+        ],
+        "required": 0
+    },
+    "staff_member_lookup": {
+        "args": [
+            "p_member_number"
+        ],
+        "required": 1
+    },
+    "staff_set_post_hidden": {
+        "args": [
+            "p_post",
+            "p_hidden",
+            "p_reason"
+        ],
+        "required": 2
+    }
+}
