@@ -35,6 +35,10 @@ jobs:
         env:
           VOLUME_P95_MS: '750'
         run: ./supabase/tests/run.sh
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Notification emails (escaping, no header tricks)
+        run: node --experimental-strip-types supabase/functions/notify/email.test.ts
       - name: The app's list of database functions matches the migrations
         run: |
           ./supabase/tests/dump_contract.sh
