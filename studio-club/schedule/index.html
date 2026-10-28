@@ -94,7 +94,7 @@ footer a{color:var(--ink)}
 .vhead{display:flex;flex-direction:column;gap:2px}
 .vhead .script{font-family:var(--script);font-size:52px;color:var(--ink);line-height:1;margin:0;font-weight:400}
 .vhead p{margin:0;color:var(--muted);font-size:13.5px}
-.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
 .day{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:8px 0;font:500 12px var(--sans);letter-spacing:.08em;color:var(--deep);cursor:pointer}
 .day[aria-pressed="true"]{background:var(--ink);color:var(--onink);border-color:var(--ink)}
 .classes{display:flex;flex-direction:column;gap:8px}
@@ -109,7 +109,7 @@ footer a{color:var(--ink)}
 .calbar{display:flex;align-items:center;justify-content:space-between}
 .calbar h3{margin:0;font-family:var(--serif);font-style:italic;font-weight:500;font-size:22px;color:var(--ink)}
 .navb{background:var(--card);border:1px solid var(--line);border-radius:50%;width:36px;height:36px;color:var(--ink);cursor:pointer;font-size:16px}
-.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
 .dow{font-size:10.5px;letter-spacing:.12em;text-align:center;color:var(--muted);padding-bottom:2px}
 .cell{aspect-ratio:1/1.05;max-width:100%;border-radius:10px;background:var(--card);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:5px;gap:3px;font:400 13px var(--sans);color:var(--deep);cursor:pointer;font-variant-numeric:tabular-nums}
 .cell.out{visibility:hidden}
@@ -141,6 +141,25 @@ textarea{min-height:84px;resize:vertical}
 #ig-live:empty{display:none}
 #ig-live:not(:empty)+.igframe{display:none!important}
 #ig-live{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
+label.chk{flex-direction:row;align-items:flex-start;gap:10px;font-weight:400;color:var(--deep);font-size:13.5px}
+label.chk input{width:auto;margin-top:3px;flex:none}
+.card{display:block;text-decoration:none;color:var(--deep);background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px;overflow:hidden}
+.card:hover{border-color:var(--sage)}
+.card img{display:block;width:calc(100% + 32px);margin:-14px -16px 12px;max-height:220px;object-fit:cover}
+.card .kind{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--clay);font-weight:500}
+.card h3{margin:4px 0 4px;font-family:var(--serif);font-style:italic;font-weight:500;font-size:21px;color:var(--ink);line-height:1.2}
+.card p{margin:0;color:var(--muted);font-size:13.5px}
+.post{display:flex;flex-direction:column;gap:12px}
+.post h1{margin:0;font-family:var(--serif);font-style:italic;font-weight:500;font-size:30px;line-height:1.15;color:var(--ink)}
+.post img{width:100%;border-radius:16px;max-height:320px;object-fit:cover}
+.post p{margin:0;font-size:15.5px;line-height:1.7}
+.who{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 14px}
+.who img{width:48px;height:48px;border-radius:50%;object-fit:cover;flex:none}
+.who b{font-weight:500}.who span{display:block;font-size:12.5px;color:var(--muted)}
+.err{font-size:13.5px;color:#9a4b3a;margin:0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .err{color:#e4a08f}}
 </style>
 
 <div class="wrap">
@@ -191,6 +210,12 @@ textarea{min-height:84px;resize:vertical}
       <a class="link" href="#calendar">
         <span class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 10h16M9 3.5v4M15 3.5v4"/></svg></span>
         <span class="lt"><strong>this month's calendar</strong><span>classes + every event</span></span><span class="arrow">›</span></a>
+      <a class="link" href="#join" data-live>
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M4 6.5h16v11H4z"/><path d="M4 7l8 6 8-6"/></svg></span>
+        <span class="lt"><strong>join our list</strong><span>class news + event invites, no spam</span></span><span class="arrow">›</span></a>
+      <a class="link" href="#journal" data-live>
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M6 4.5h10a2 2 0 0 1 2 2v13H8a2 2 0 0 1-2-2z"/><path d="M9.5 9h5M9.5 12.5h5"/></svg></span>
+        <span class="lt"><strong>the journal</strong><span>teacher of the week + stories from the studio</span></span><span class="arrow">›</span></a>
       <a class="link" href="https://gilbertflex.com/?utm_source=instagram&amp;utm_medium=bio&amp;utm_campaign=link_page" target="_blank" rel="noopener">
         <span class="ic"><svg viewBox="0 0 24 24"><path d="M5 20V9l7-5 7 5v11"/><path d="M10 20v-5h4v5"/></svg></span>
         <span class="lt"><strong>our website</strong><span>gilbertflex.com</span></span><span class="arrow">›</span></a>
@@ -257,6 +282,9 @@ textarea{min-height:84px;resize:vertical}
       <label for="h6">how many spots?<input id="h6" name="Spots" inputmode="numeric" placeholder="e.g. 15"></label>
       <label for="h7">anything we have to say? <em>(must-mention details)</em><textarea id="h7" name="Must-say details" placeholder="e.g. bring a blanket, 18+ only"></textarea></label>
       <label for="h8">your best phone or email<input id="h8" name="Contact" placeholder="so we can get back to you"></label>
+      <label class="chk"><input type="checkbox" name="consent"><span>it's ok to send me studio news and event invites <em>(unsubscribe any time)</em></span></label>
+      <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <p class="err" id="hosterr" role="alert" hidden></p>
       <button class="btn" type="submit">make my request</button>
     </form>
     <div class="out" id="hostout" hidden></div>
@@ -280,11 +308,59 @@ textarea{min-height:84px;resize:vertical}
       <label for="p3">tell us the idea<textarea id="p3" name="Idea" placeholder="the cute details"></textarea></label>
       <label for="p4">your name<input id="p4" name="Name"></label>
       <label for="p5">best phone or email<input id="p5" name="Contact"></label>
+      <label class="chk"><input type="checkbox" name="consent"><span>it's ok to send me studio news and event invites <em>(unsubscribe any time)</em></span></label>
+      <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <p class="err" id="parterr" role="alert" hidden></p>
       <button class="btn" type="submit">make my request</button>
     </form>
     <div class="out" id="partout" hidden></div>
   </section>
+
+  <!-- JOIN THE LIST -->
+  <section class="view" id="v-join" hidden>
+    <a class="back" href="#home">‹ back</a>
+    <div class="vhead"><h1 class="script">join our list</h1><p>class news, event invites and the occasional treat. no spam, and you can leave any time.</p></div>
+    <form id="joinform" novalidate>
+      <label for="j1">your name<input id="j1" name="Name" autocomplete="given-name"></label>
+      <label for="j2">best email or phone<input id="j2" name="Contact" autocomplete="email"></label>
+      <label class="chk"><input type="checkbox" name="consent" checked><span>yes, send me studio news and event invites <em>(unsubscribe any time)</em></span></label>
+      <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <p class="err" id="joinerr" role="alert" hidden></p>
+      <button class="btn" type="submit">sign me up</button>
+    </form>
+    <div class="out" id="joinout" hidden></div>
+  </section>
+
+  <!-- ONE EVENT -->
+  <section class="view" id="v-event" hidden>
+    <a class="back" href="#calendar">‹ back</a>
+    <div id="eventbody"></div>
+  </section>
+
+  <!-- JOURNAL -->
+  <section class="view" id="v-journal" hidden>
+    <a class="back" href="#home">‹ back</a>
+    <div class="vhead"><h1 class="script">the journal</h1><p>teacher of the week, event of the week, and stories from our little studio.</p></div>
+    <div class="evlist" id="journallist"></div>
+    <div class="sec-title"><span class="script">meet the teachers</span></div>
+    <div class="evlist" id="teacherlist"></div>
+  </section>
+  <section class="view" id="v-post" hidden>
+    <a class="back" href="#journal">‹ the journal</a>
+    <article class="post" id="postbody"></article>
+  </section>
+
+  <!-- UNSUBSCRIBE -->
+  <section class="view" id="v-unsubscribe" hidden>
+    <a class="back" href="#home">‹ back</a>
+    <div class="vhead"><h1 class="script">unsubscribe</h1></div>
+    <p id="unsubmsg" class="note" style="text-align:left">one moment...</p>
+  </section>
 </div>
+
+<!-- Set these two to go live. Leave them empty and the page works on its own:
+     events stay in the lists below and the forms build a message to send. -->
+<script id="gfs-config">window.GFS=window.GFS||{url:"",key:""};</script>
 
 <script>
 (function(){
@@ -318,10 +394,11 @@ textarea{min-height:84px;resize:vertical}
     return h;
   }
   /* today at the studio */
-  (function(){var el=document.getElementById("today");if(!el)return;var L=WEEK[TODAY.getDay()],E=eventsOn(TODAY),h='<b>today</b>';
+  function renderToday(){var el=document.getElementById("today");if(!el)return;var L=WEEK[TODAY.getDay()],E=eventsOn(TODAY),h='<b>today</b>';
     E.forEach(function(e){h+='<span>'+(e.t?e.t+' ':'')+esc(e.n)+'</span>'});
     L.forEach(function(c){h+='<span>'+c[0].replace(":00","")+' '+c[1]+'</span>'});
-    if(!L.length&&!E.length)h+='<span>rest day, see you tomorrow</span>';el.innerHTML=h;})();
+    if(!L.length&&!E.length)h+='<span>rest day, see you tomorrow</span>';el.innerHTML=h;}
+  renderToday();
   /* feature card hides once the event has passed */
   if(iso(TODAY)>"2026-10-27"){ var f=document.getElementById("feature"); if(f) f.hidden=true; }
 
@@ -364,7 +441,7 @@ textarea{min-height:84px;resize:vertical}
     grid.innerHTML=h;
     if(picked){var pd=parse(picked);dl.innerHTML='<p class="note">'+DN[pd.getDay()].toLowerCase()+', '+MN[pd.getMonth()].toLowerCase()+' '+pd.getDate()+'</p>'+classRows(WEEK[pd.getDay()],eventsOn(pd));}else dl.innerHTML="";
     var up=EVENTS.filter(function(e){return e.end>=iso(TODAY)});
-    document.getElementById("evlist").innerHTML=up.length?up.map(function(e){var a=parse(e.d);return '<div class="cls ev"><time>'+MN[a.getMonth()].slice(0,3)+' '+a.getDate()+'</time><div><b>'+esc(e.n)+'</b><span>'+esc(e.s)+(e.t?' · '+e.t:'')+'</span></div></div>'}).join(""):'<p class="note">new events coming soon. peek at our instagram.</p>';
+    document.getElementById("evlist").innerHTML=up.length?up.map(function(e){var a=parse(e.d);return '<div class="cls ev"><time>'+MN[a.getMonth()].slice(0,3)+' '+a.getDate()+'</time><div><b>'+esc(e.n)+'</b><span>'+esc(e.s)+(e.t?' · '+e.t:'')+'</span>'+(e.id?'<a class="mini" style="display:inline-block;margin-top:6px;text-decoration:none" href="#event='+encodeURIComponent(e.id)+'">save my spot</a>':'')+'</div></div>'}).join(""):'<p class="note">new events coming soon. peek at our instagram.</p>';
   }
   grid.addEventListener("click",function(e){var b=e.target.closest(".cell");if(!b||!b.dataset.k)return;picked=b.dataset.k;renderCal()});
   document.getElementById("prev").onclick=function(){cm--;if(cm<0){cm=11;cy--}picked=null;renderCal()};
@@ -380,12 +457,13 @@ textarea{min-height:84px;resize:vertical}
   document.addEventListener("click",function(e){var b=e.target.closest("[data-copy]");if(b)copy(b.dataset.copy,b)});
 
   /* ---------- request forms: build a message to send ---------- */
-  function wire(formId,outId,title,extra){
+  function wire(formId,outId,title,extra,kind){
     var f=document.getElementById(formId),o=document.getElementById(outId);
     f.addEventListener("submit",function(e){
       e.preventDefault();
+      if(live()&&kind){ return liveSubmit(f,o,kind,extra); }
       var lines=[title];
-      Array.prototype.forEach.call(f.querySelectorAll("input,textarea"),function(el){lines.push(el.name+": "+(el.value.trim()||"not sure yet"))});
+      Array.prototype.forEach.call(f.querySelectorAll("input[name],textarea[name]"),function(el){if(el.type==="checkbox"||el.name==="website")return;lines.push(el.name+": "+(el.value.trim()||"not sure yet"))});
       if(extra){var x=extra();if(x)lines.splice(3,0,x)}
       var msg=lines.join("\n");
       o.innerHTML='<p class="ok">all set! copy this and send it to us on Instagram or by text, and we\'ll get back to you.</p><pre></pre><div class="row"><button class="btn" type="button" data-act="copy">copy my request</button><a class="btn ghost" href="https://ig.me/m/gilbertflexstudio" target="_blank" rel="noopener">open our instagram DMs</a></div><p class="note" style="text-align:left">or text it to <b style="font-weight:500">(480) 420-7297</b></p>';
@@ -394,19 +472,149 @@ textarea{min-height:84px;resize:vertical}
       o.scrollIntoView({behavior:"smooth",block:"nearest"});
     });
   }
-  wire("hostform","hostout","Event request for Gilbert Flex Studio");
+  wire("hostform","hostout","Event request for Gilbert Flex Studio",null,"event_request");
   var picks=document.getElementById("picks");
   picks.addEventListener("click",function(e){var b=e.target.closest(".pick");if(b)b.setAttribute("aria-pressed",b.getAttribute("aria-pressed")==="true"?"false":"true")});
-  wire("partform","partout","Partner request for Gilbert Flex Studio",function(){var on=[].slice.call(picks.querySelectorAll('[aria-pressed="true"]')).map(function(b){return b.textContent});return "Dreaming up: "+(on.join(", ")||"not sure yet")});
+  wire("partform","partout","Partner request for Gilbert Flex Studio",function(){var on=[].slice.call(picks.querySelectorAll('[aria-pressed="true"]')).map(function(b){return b.textContent});return "Dreaming up: "+(on.join(", ")||"not sure yet")},"partner_request");
+
+  /* ---------- the live layer (only when GFS.url and GFS.key are set) ---------- */
+  var CFG=window.GFS||{};
+  function live(){ return !!(CFG.url&&CFG.key); }
+  function uuid(){ try{ return crypto.randomUUID(); }catch(e){ return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(c){var r=Math.random()*16|0;return (c==="x"?r:(r&3|8)).toString(16)}); } }
+  function rpc(name,args){
+    return fetch(CFG.url+"/rest/v1/rpc/"+name,{method:"POST",headers:{"content-type":"application/json",apikey:CFG.key},body:JSON.stringify(args||{})})
+      .then(function(r){return r.text().then(function(t){var j=null;try{j=t?JSON.parse(t):null}catch(e){}if(!r.ok||(j===null&&t&&!/^null$/.test(t)))throw new Error("http "+r.status);return j})});
+  }
+  var SRC=null; try{ var qs=new URLSearchParams(location.search).get("src"); if(qs&&/^[A-Za-z0-9_-]{1,40}$/.test(qs)){SRC=qs;sessionStorage.setItem("gfs_src",qs)} else {SRC=sessionStorage.getItem("gfs_src")} }catch(e){}
+  Array.prototype.forEach.call(document.querySelectorAll("[data-live]"),function(a){a.hidden=!live()});
+
+  function fmtDay(iso){return new Intl.DateTimeFormat("en-CA",{timeZone:"America/Phoenix",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(iso))}
+  function fmtTime(iso){return new Intl.DateTimeFormat("en-US",{timeZone:"America/Phoenix",hour:"numeric",minute:"2-digit"}).format(new Date(iso)).toLowerCase()}
+  function fmtLong(iso){return new Intl.DateTimeFormat("en-US",{timeZone:"America/Phoenix",weekday:"long",month:"long",day:"numeric"}).format(new Date(iso)).toLowerCase()}
+  var DBEVENTS=[];
+  function loadEvents(){
+    if(!live()) return Promise.resolve();
+    return rpc("public_events").then(function(list){
+      DBEVENTS=Array.isArray(list)?list:[];
+      EVENTS=DBEVENTS.map(function(e){
+        var bits=[]; if(e.price)bits.push(e.price); if(e.spots_left!=null)bits.push(e.spots_left>0?e.spots_left+" spot"+(e.spots_left===1?"":"s")+" left":"full"); if(e.host)bits.push("with "+e.host);
+        return {id:e.id,d:fmtDay(e.starts_at),end:fmtDay(e.ends_at||e.starts_at),t:fmtTime(e.starts_at),n:e.title,s:bits.join(" · ")||e.location};
+      });
+      renderToday(); renderDays(); renderCal();
+    }).catch(function(){ /* keep the built-in list */ });
+  }
+
+  function msgFor(status){
+    return {invalid:"please add a name and a phone or email so we can get back to you.",rate_limited:"that's a lot from one contact! try again in a little while, or DM us on instagram.",busy:"we're getting a lot of requests right now. please try again in a few minutes, or DM us on instagram.",full:"this one just filled up. join our list and you'll hear about the next one.",closed:"this event isn't open for sign-ups any more."}[status]||"something went wrong. please try again.";
+  }
+  function formBits(f){
+    var g=function(n){var el=f.querySelector('[name="'+n+'"]');return el?(el.type==="checkbox"?el.checked:el.value.trim()):""};
+    return {name:g("Name")||g("Host and Instagram")||g("Business"),contact:g("Contact"),consent:g("consent"),trap:g("website")};
+  }
+  function liveSubmit(f,o,kind,extra){
+    var errEl=f.querySelector(".err"),btn=f.querySelector('button[type="submit"]'),b=formBits(f);
+    errEl.hidden=true;
+    var fields={};
+    Array.prototype.forEach.call(f.querySelectorAll("input[name],textarea[name]"),function(el){if(el.type==="checkbox"||el.name==="website"||el.name==="Contact"||el.name==="Name")return;var v=el.value.trim();if(v)fields[el.name]=v});
+    if(extra){var x=extra();if(x)fields["Dreaming up"]=x.replace(/^Dreaming up: /,"")}
+    if(!b.name) b.name=(kind==="event_request"?"Event host":"Partner");
+    f._cid=f._cid||uuid();
+    btn.disabled=true; var old=btn.textContent; btn.textContent="sending...";
+    rpc("submit_form",{p_client_id:f._cid,p_kind:kind,p_name:b.name,p_contact:b.contact,p_fields:fields,p_consent:b.consent,p_source:SRC,p_trap:b.trap}).then(function(r){
+      btn.disabled=false; btn.textContent=old;
+      if(r&&r.status==="ok"){
+        f.hidden=true; o.innerHTML='<p class="ok">got it, thank you! we read every one and will be in touch soon.</p><div class="row"><a class="btn ghost" href="#home">back to home</a></div>'; o.hidden=false; f._cid=null; return;
+      }
+      errEl.textContent=msgFor(r&&r.status); errEl.hidden=false;
+    }).catch(function(){
+      btn.disabled=false; btn.textContent=old;
+      errEl.textContent="that didn't go through, and nothing was lost. tap again, or message us on instagram."; errEl.hidden=false;
+    });
+  }
+  (function(){
+    var f=document.getElementById("joinform"),o=document.getElementById("joinout");
+    f.addEventListener("submit",function(e){
+      e.preventDefault(); var errEl=document.getElementById("joinerr"),btn=f.querySelector('button[type="submit"]'),b=formBits(f); errEl.hidden=true;
+      if(!live()){errEl.textContent="sign-ups open soon. follow us on instagram for now!";errEl.hidden=false;return}
+      f._cid=f._cid||uuid(); btn.disabled=true; var old=btn.textContent; btn.textContent="sending...";
+      rpc("submit_form",{p_client_id:f._cid,p_kind:"signup",p_name:b.name,p_contact:b.contact,p_fields:{},p_consent:b.consent,p_source:SRC,p_trap:b.trap}).then(function(r){
+        btn.disabled=false; btn.textContent=old;
+        if(r&&r.status==="ok"){f.hidden=true;o.innerHTML='<p class="ok">you\'re on the list! see you soon.</p><div class="row"><a class="btn ghost" href="#home">back to home</a></div>';o.hidden=false;return}
+        errEl.textContent=msgFor(r&&r.status);errEl.hidden=false;
+      }).catch(function(){btn.disabled=false;btn.textContent=old;errEl.textContent="that didn't go through. tap again, or message us on instagram.";errEl.hidden=false});
+    });
+  })();
+
+  function para(text){return String(text||"").split(/\n\s*\n/).map(function(t){return "<p>"+esc(t.trim()).replace(/\n/g,"<br>")+"</p>"}).join("")}
+  var KIND={teacher_of_week:"teacher of the week",event_of_week:"event of the week",post:"from the studio"};
+  function httpsImg(u,alt){return /^https:\/\//.test(u||"")?'<img src="'+esc(u)+'" alt="'+esc(alt||"")+'" loading="lazy">':""}
+  function loadJournal(){
+    var L=document.getElementById("journallist"),T=document.getElementById("teacherlist");
+    if(!live()){L.innerHTML='<p class="note">the journal opens soon.</p>';T.innerHTML="";return}
+    L.innerHTML='<p class="note">loading...</p>';
+    rpc("public_journal",{p_limit:12}).then(function(list){
+      L.innerHTML=(list&&list.length)?list.map(function(p){return '<a class="card" href="#post='+encodeURIComponent(p.slug)+'">'+httpsImg(p.cover_url,p.title)+'<span class="kind">'+esc(KIND[p.kind]||"")+'</span><h3>'+esc(p.title)+'</h3><p>'+esc(p.excerpt)+(String(p.excerpt).length>=220?"...":"")+'</p><p style="margin-top:6px">by '+esc(p.author)+' · '+esc(fmtLong(p.published_at))+'</p></a>'}).join(""):'<p class="note">first stories coming soon.</p>';
+    }).catch(function(){L.innerHTML='<p class="note">couldn\'t load the journal. pull down to try again.</p>'});
+    rpc("public_teachers").then(function(list){
+      T.innerHTML=(list&&list.length)?list.map(function(t){return '<div class="who">'+httpsImg(t.photo_url,t.name)+'<div><b>'+esc(t.name)+'</b><span>'+esc(t.bio||"")+'</span></div></div>'}).join(""):"";
+    }).catch(function(){T.innerHTML=""});
+  }
+  function loadPost(slug){
+    var B=document.getElementById("postbody"); if(!live()||!slug){B.innerHTML='<p class="note">we couldn\'t find that story.</p>';return}
+    B.innerHTML='<p class="note">loading...</p>';
+    rpc("public_post",{p_slug:slug}).then(function(p){
+      if(!p){B.innerHTML='<p class="note">we couldn\'t find that story. it may have moved.</p><a class="btn ghost" href="#journal">back to the journal</a>';return}
+      B.innerHTML=httpsImg(p.cover_url,p.title)+'<span class="eyebrow" style="margin:0">'+esc(KIND[p.kind]||"")+'</span><h1>'+esc(p.title)+'</h1><p class="note" style="text-align:left">by '+esc(p.author)+' · '+esc(fmtLong(p.published_at))+'</p>'+para(p.body);
+      document.title=p.title+" · Gilbert Flex Studio";
+    }).catch(function(){B.innerHTML='<p class="note">couldn\'t load this story. check your connection and try again.</p>'});
+  }
+  function loadEvent(id){
+    var B=document.getElementById("eventbody");
+    function draw(e){
+      if(!e){B.innerHTML='<div class="vhead"><h1 class="script">hmm</h1><p>that event isn\'t open any more.</p></div><a class="btn ghost" href="#calendar">see the calendar</a>';return}
+      var full=e.spots_left===0;
+      B.innerHTML='<div class="vhead"><h1 class="script">'+esc(e.title)+'</h1><p>'+esc(fmtLong(e.starts_at))+' · '+esc(fmtTime(e.starts_at))+' · '+esc(e.location)+'</p></div>'
+        +'<div class="facts">'+(e.price?'<span class="chip">'+esc(e.price)+'</span>':'')+(e.host?'<span class="chip">with '+esc(e.host)+'</span>':'')+(e.spots_left!=null?'<span class="chip">'+(full?'full':e.spots_left+' spot'+(e.spots_left===1?'':'s')+' left')+'</span>':'')+'</div>'
+        +(e.blurb?para(e.blurb):'')
+        +(full?'<p class="ok">this one is full. join our list to hear about the next one.</p><a class="btn" href="#join">join our list</a>':
+          '<form id="evform" novalidate><label for="ev1">your name<input id="ev1" name="Name" autocomplete="given-name"></label><label for="ev2">best email or phone<input id="ev2" name="Contact" autocomplete="email"></label>'
+          +'<label class="chk"><input type="checkbox" name="consent"><span>it\'s ok to send me studio news and event invites <em>(unsubscribe any time)</em></span></label><input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"><p class="err" id="everr" role="alert" hidden></p><button class="btn" type="submit">save my spot</button></form><div class="out" id="evout" hidden></div>')
+        +(e.booking_url&&/^https:\/\//.test(e.booking_url)?'<a class="btn ghost" href="'+esc(e.booking_url)+'" target="_blank" rel="noopener">book on the host\'s page</a>':'');
+      var f=document.getElementById("evform"); if(!f) return;
+      f.addEventListener("submit",function(ev){
+        ev.preventDefault(); var errEl=document.getElementById("everr"),btn=f.querySelector('button[type="submit"]'),b=formBits(f); errEl.hidden=true;
+        f._cid=f._cid||uuid(); btn.disabled=true; var old=btn.textContent; btn.textContent="saving...";
+        rpc("event_signup",{p_client_id:f._cid,p_event_id:e.id,p_name:b.name,p_contact:b.contact,p_consent:b.consent,p_source:SRC,p_trap:b.trap}).then(function(r){
+          btn.disabled=false; btn.textContent=old;
+          if(r&&r.status==="ok"){f.hidden=true;var o=document.getElementById("evout");o.innerHTML='<p class="ok">you\'re on the list for '+esc(e.title)+'! we\'ll see you there.</p><div class="row"><a class="btn ghost" href="#calendar">back to the calendar</a></div>';o.hidden=false;loadEvents();return}
+          errEl.textContent=msgFor(r&&r.status);errEl.hidden=false;
+        }).catch(function(){btn.disabled=false;btn.textContent=old;errEl.textContent="that didn't go through, and your spot isn't lost. tap again.";errEl.hidden=false});
+      });
+    }
+    if(!live()){draw(null);return}
+    var found=DBEVENTS.filter(function(x){return x.id===id})[0];
+    if(found){draw(found);return}
+    B.innerHTML='<p class="note">loading...</p>';
+    rpc("public_events").then(function(list){DBEVENTS=list||[];draw(DBEVENTS.filter(function(x){return x.id===id})[0])}).catch(function(){B.innerHTML='<p class="note">couldn\'t load this event. check your connection and try again.</p>'});
+  }
+  function doUnsub(token){
+    var m=document.getElementById("unsubmsg");
+    if(!live()||!/^[0-9a-f-]{36}$/i.test(token||"")){m.textContent="this link doesn't look right. message us on instagram and we'll take you off by hand.";return}
+    m.textContent="one moment...";
+    rpc("unsubscribe",{p_token:token}).then(function(r){m.textContent=(r&&r.status==="ok")?"you're unsubscribed. we're sorry to see you go, and you're always welcome in class.":"we couldn't find that link. message us on instagram and we'll take you off by hand."}).catch(function(){m.textContent="that didn't go through. please try the link again in a moment."});
+  }
 
   /* ---------- views by #hash ---------- */
-  var VIEWS=["home","schedule","calendar","host","partner"];
+  var VIEWS=["home","schedule","calendar","host","partner","join","journal","post","event","unsubscribe"];
   function show(){
-    var h=(location.hash||"#home").slice(1); if(VIEWS.indexOf(h)<0) h="home";
+    var raw=(location.hash||"#home").slice(1),i=raw.indexOf("="),h=i<0?raw:raw.slice(0,i),arg="";
+    try{arg=i<0?"":decodeURIComponent(raw.slice(i+1))}catch(e){arg=""}
+    if(VIEWS.indexOf(h)<0) h="home";
     VIEWS.forEach(function(v){document.getElementById("v-"+v).hidden=(v!==h)});
+    if(h==="journal")loadJournal(); else if(h==="post")loadPost(arg); else if(h==="event")loadEvent(arg); else if(h==="unsubscribe")doUnsub(arg);
     try{window.scrollTo(0,0)}catch(e){}
   }
-  window.addEventListener("hashchange",show); show();
+  window.addEventListener("hashchange",show); show(); loadEvents();
 })();
 </script>
 

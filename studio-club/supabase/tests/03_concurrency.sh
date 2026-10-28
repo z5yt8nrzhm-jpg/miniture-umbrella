@@ -126,4 +126,52 @@ bench 30 10 "$TMP/s5.sql"
 check "exactly one redeem succeeded" "select count(*) = 1 from tests.race_log where status = 'ok'"
 check "the other 299 were told it was already redeemed" "select count(*) = 299 from tests.race_log where status = 'already_redeemed'"
 
+# ── 6. signed-out phones: the last spots of an event, and a form tapped again and again ──
+echo; echo "-- 6. 400 people, 50 phones, 2,000 taps on an event with 10 spots"
+Q <<'SQL'
+truncate tests.race_log;
+grant insert on tests.race_log to anon;
+select tests.staff('Desk6') \g /dev/null
+SQL
+EV=$(Q -c "insert into public.events (title, starts_at, spots, published) values ('Race night', now() + interval '2 days', 10, true) returning id")
+cat > "$TMP/s6.sql" <<EOS
+\\set n random(1, 400)
+begin;
+set local role anon;
+insert into tests.race_log (member_n, status) select :n, public.event_signup(gen_random_uuid(), '$EV', 'Person ' || :n, 'p' || :n || '@example.test') ->> 'status';
+commit;
+EOS
+bench 50 40 "$TMP/s6.sql"
+check "every tap got a plain answer" "select count(*) = 0 from tests.race_log where status not in ('ok', 'full')"
+check "exactly 10 people hold the 10 spots" "select count(*) = 10 from public.leads where event_id = '$EV' and kind = 'event_signup'"
+check "nobody holds a spot twice" "select count(*) = 0 from (select contact_norm from public.leads where event_id = '$EV' group by 1 having count(*) > 1) t"
+check "the public list shows no spots left" "select (public.public_events() -> 0 ->> 'spots_left')::int = 0"
+
+echo; echo "-- 7. one form tapped 400 times, and one contact sending 300 different forms at once"
+Q <<'SQL'
+truncate tests.race_log;
+SQL
+SAME=$(Q -c "select gen_random_uuid()")
+cat > "$TMP/s7a.sql" <<EOS
+\\set n 1
+begin;
+set local role anon;
+insert into tests.race_log (member_n, status) select :n, public.submit_form('$SAME', 'signup', 'Retry Rita', 'rita@example.test', '{}') ->> 'status';
+commit;
+EOS
+bench 20 20 "$TMP/s7a.sql"
+check "a form tapped 400 times is stored once" "select count(*) = 1 from public.leads where contact_norm = 'rita@example.test'"
+check "every one of those taps was told ok" "select count(*) = 400 from tests.race_log where status = 'ok'"
+Q -c "truncate tests.race_log"
+cat > "$TMP/s7b.sql" <<EOS
+\\set n 2
+begin;
+set local role anon;
+insert into tests.race_log (member_n, status) select :n, public.submit_form(gen_random_uuid(), 'signup', 'Spammer', 'spam@example.test', '{}') ->> 'status';
+commit;
+EOS
+bench 30 10 "$TMP/s7b.sql"
+check "the limit of 5 forms an hour per contact held under a race" "select count(*) = 5 from public.leads where contact_norm = 'spam@example.test'"
+check "the other 295 were told to wait" "select count(*) = 295 from tests.race_log where status = 'rate_limited'"
+
 echo; echo "concurrency: $PASSED checks passed"

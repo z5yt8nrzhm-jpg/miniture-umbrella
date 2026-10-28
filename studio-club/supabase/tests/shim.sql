@@ -41,3 +41,13 @@ grant execute on function auth.uid(), auth.role() to anon, authenticated, servic
 alter default privileges for role postgres in schema public grant all on tables    to anon, authenticated, service_role;
 alter default privileges for role postgres in schema public grant all on functions to anon, authenticated, service_role;
 alter default privileges for role postgres in schema public grant all on sequences to anon, authenticated, service_role;
+
+-- Storage, only the parts the club's photo rules touch.
+create schema storage;
+create table storage.buckets (id text primary key, name text not null, public boolean not null default false);
+create table storage.objects (id uuid primary key default gen_random_uuid(), bucket_id text, name text, owner uuid);
+alter table storage.objects enable row level security;
+create function storage.foldername(name text) returns text[] language sql immutable as $$
+  select (string_to_array(name, '/'))[1:cardinality(string_to_array(name, '/')) - 1] $$;
+grant usage on schema storage to anon, authenticated, service_role;
+grant select, insert, update, delete on storage.objects to authenticated;

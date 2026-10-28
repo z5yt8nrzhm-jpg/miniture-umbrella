@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Builds a fresh test database from the migrations and runs the checks.
 #   ./run.sh              everything
-#   ./run.sh privacy      one suite (privacy | flows | concurrency | volume)
+#   ./run.sh privacy      one suite (privacy | flows | homebase | concurrency | volume)
 # Connection comes from the usual PG* variables (PGHOST, PGUSER, ...).
 # CLUB_MIGRATIONS_DIR points at another set of migrations (used to prove the
 # tests fail when a rule is removed).
@@ -29,6 +29,7 @@ suite() {            # suite <name> <command...>
 
 [[ "$SUITE" == all || "$SUITE" == privacy ]]     && suite privacy     psql_db -f 01_privacy.sql
 [[ "$SUITE" == all || "$SUITE" == flows ]]       && suite flows       psql_db -f 02_flows.sql
+[[ "$SUITE" == all || "$SUITE" == homebase ]]    && suite homebase    psql_db -f 05_home_base.sql
 [[ "$SUITE" == all || "$SUITE" == concurrency ]] && suite concurrency bash ./03_concurrency.sh "$DB"
 [[ "$SUITE" == all || "$SUITE" == volume ]]      && suite volume      bash ./04_volume.sh "$DB"
 echo; echo "== all requested suites passed"

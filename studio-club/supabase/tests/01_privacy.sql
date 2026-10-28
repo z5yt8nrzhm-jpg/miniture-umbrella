@@ -24,8 +24,12 @@ begin
   end loop;
   for f in select p.oid::regprocedure as sig from pg_proc p join pg_namespace n on n.oid = p.pronamespace
            where n.nspname = 'public' and p.prokind = 'f' loop
-    perform tests.ok('signed-out visitor cannot run ' || f.sig, not has_function_privilege('anon', f.sig, 'execute'));
+    perform tests.ok('signed-out visitor cannot run ' || f.sig,
+      not has_function_privilege('anon', f.sig, 'execute') or f.sig::text ~ '^(submit_form|event_signup|public_events|public_journal|public_post|public_teachers|unsubscribe)\(');
   end loop;
+  perform tests.eq('signed-out visitors can run exactly the seven public functions',
+    (select count(*)::int from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+      where n.nspname = 'public' and p.prokind = 'f' and has_function_privilege('anon', p.oid, 'execute')), 7);
   perform tests.logout();
 end $$;
 
@@ -96,7 +100,13 @@ begin
    where specific_schema = 'public' and grantee = 'authenticated'
      and routine_name not in ('is_staff','upsert_my_profile','my_stats','my_history','check_in','wall_feed',
        'wall_post','wall_cheer','wall_report','delete_my_account','staff_create_class','staff_classes',
-       'staff_member_lookup','staff_redeem_perk','staff_flagged_posts','staff_set_post_hidden');
+       'staff_member_lookup','staff_redeem_perk','staff_flagged_posts','staff_set_post_hidden',
+       -- home base: the seven public ones are also open to signed-in people
+       'submit_form','event_signup','public_events','public_journal','public_post','public_teachers','unsubscribe',
+       'is_teacher','my_role','teacher_save_profile','post_save','post_submit','post_get','my_posts',
+       'staff_review_post','staff_add_teacher','staff_teachers','staff_remove_teacher','staff_save_event','staff_events',
+       'staff_delete_event','staff_inbox','staff_inbox_counts','staff_lead_set','staff_mark_attended','staff_event_signups',
+       'staff_social_save','staff_social_list','staff_social_delete','staff_audience','staff_source_report');
   perform tests.eq('members can run only the published functions', bad, 0);
 
   select count(*) into bad from pg_class c join pg_namespace n on n.oid = c.relnamespace

@@ -126,7 +126,16 @@ void main() {
         expect(c.body.keys.toSet().difference(args), isEmpty, reason: '${c.fn} sent an argument the database does not have');
         expect(required.difference(c.body.keys.toSet()), isEmpty, reason: '${c.fn} left out a required argument');
       }
-      expect(rpcs.map((c) => c.fn).toSet(), contract.keys.toSet(), reason: 'the app and the database offer different sets of functions');
+      // The web pages (links page and studio desk) call the rest. Together the
+      // app and the pages must use every function the database offers, and
+      // nothing the database does not have.
+      final web = <String>{};
+      for (final f in Directory('schedule').listSync().whereType<File>().where((f) => f.path.endsWith('.html'))) {
+        web.addAll(RegExp(r'''\brpc\(\s*["']([a-z_]+)["']''').allMatches(f.readAsStringSync()).map((m) => m.group(1)!));
+      }
+      expect(web.difference(contract.keys.toSet()), isEmpty, reason: 'a web page calls a database function that does not exist');
+      expect(// is_teacher is only used inside the photo-upload rule, like is_staff is inside other rules.
+      rpcs.map((c) => c.fn).toSet().union(web).union({'is_teacher'}), contract.keys.toSet(), reason: 'the app, the web pages and the database offer different sets of functions');
     });
 
     test('nothing sent to the database is null where the database has a default', () async {

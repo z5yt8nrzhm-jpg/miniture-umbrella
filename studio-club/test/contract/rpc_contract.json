@@ -1,4 +1,9 @@
 {
+    "my_role": {
+        "args": [
+        ],
+        "required": 0
+    },
     "check_in": {
         "args": [
             "p_code"
@@ -10,10 +15,32 @@
         ],
         "required": 0
     },
+    "my_posts": {
+        "args": [
+        ],
+        "required": 0
+    },
     "my_stats": {
         "args": [
         ],
         "required": 0
+    },
+    "post_get": {
+        "args": [
+            "p_id"
+        ],
+        "required": 1
+    },
+    "post_save": {
+        "args": [
+            "p_client_id",
+            "p_id",
+            "p_kind",
+            "p_title",
+            "p_body",
+            "p_cover"
+        ],
+        "required": 5
     },
     "wall_feed": {
         "args": [
@@ -30,6 +57,11 @@
         ],
         "required": 2
     },
+    "is_teacher": {
+        "args": [
+        ],
+        "required": 0
+    },
     "my_history": {
         "args": [
             "p_limit"
@@ -43,11 +75,73 @@
         ],
         "required": 2
     },
+    "post_submit": {
+        "args": [
+            "p_id"
+        ],
+        "required": 1
+    },
+    "public_post": {
+        "args": [
+            "p_slug"
+        ],
+        "required": 1
+    },
+    "staff_inbox": {
+        "args": [
+            "p_status",
+            "p_kinds",
+            "p_limit",
+            "p_before"
+        ],
+        "required": 0
+    },
+    "submit_form": {
+        "args": [
+            "p_client_id",
+            "p_kind",
+            "p_name",
+            "p_contact",
+            "p_fields",
+            "p_consent",
+            "p_source",
+            "p_trap"
+        ],
+        "required": 4
+    },
+    "unsubscribe": {
+        "args": [
+            "p_token"
+        ],
+        "required": 1
+    },
     "wall_report": {
         "args": [
             "p_post"
         ],
         "required": 1
+    },
+    "event_signup": {
+        "args": [
+            "p_client_id",
+            "p_event_id",
+            "p_name",
+            "p_contact",
+            "p_consent",
+            "p_source",
+            "p_trap"
+        ],
+        "required": 4
+    },
+    "staff_events": {
+        "args": [
+        ],
+        "required": 0
+    },
+    "public_events": {
+        "args": [
+        ],
+        "required": 0
     },
     "staff_classes": {
         "args": [
@@ -55,16 +149,101 @@
         ],
         "required": 0
     },
+    "public_journal": {
+        "args": [
+            "p_limit",
+            "p_before"
+        ],
+        "required": 0
+    },
+    "staff_audience": {
+        "args": [
+            "p_segment",
+            "p_event",
+            "p_days"
+        ],
+        "required": 0
+    },
+    "staff_lead_set": {
+        "args": [
+            "p_lead",
+            "p_status",
+            "p_note"
+        ],
+        "required": 2
+    },
+    "staff_teachers": {
+        "args": [
+        ],
+        "required": 0
+    },
+    "public_teachers": {
+        "args": [
+        ],
+        "required": 0
+    },
+    "staff_save_event": {
+        "args": [
+            "p_id",
+            "p_title",
+            "p_blurb",
+            "p_starts",
+            "p_ends",
+            "p_location",
+            "p_price",
+            "p_spots",
+            "p_booking_url",
+            "p_host",
+            "p_published"
+        ],
+        "required": 4
+    },
     "delete_my_account": {
         "args": [
         ],
         "required": 0
+    },
+    "staff_add_teacher": {
+        "args": [
+            "p_email",
+            "p_name",
+            "p_bio"
+        ],
+        "required": 2
     },
     "staff_redeem_perk": {
         "args": [
             "p_member_perk"
         ],
         "required": 1
+    },
+    "staff_review_post": {
+        "args": [
+            "p_id",
+            "p_decision",
+            "p_note"
+        ],
+        "required": 2
+    },
+    "staff_social_list": {
+        "args": [
+            "p_from",
+            "p_to"
+        ],
+        "required": 0
+    },
+    "staff_social_save": {
+        "args": [
+            "p_id",
+            "p_when",
+            "p_kind",
+            "p_caption",
+            "p_image",
+            "p_status",
+            "p_event",
+            "p_journal"
+        ],
+        "required": 4
     },
     "upsert_my_profile": {
         "args": [
@@ -84,14 +263,63 @@
         ],
         "required": 4
     },
+    "staff_delete_event": {
+        "args": [
+            "p_id"
+        ],
+        "required": 1
+    },
+    "staff_inbox_counts": {
+        "args": [
+        ],
+        "required": 0
+    },
+    "staff_event_signups": {
+        "args": [
+            "p_event"
+        ],
+        "required": 1
+    },
     "staff_flagged_posts": {
         "args": [
         ],
         "required": 0
     },
+    "staff_mark_attended": {
+        "args": [
+            "p_lead",
+            "p_attended"
+        ],
+        "required": 2
+    },
     "staff_member_lookup": {
         "args": [
             "p_member_number"
+        ],
+        "required": 1
+    },
+    "staff_social_delete": {
+        "args": [
+            "p_id"
+        ],
+        "required": 1
+    },
+    "staff_source_report": {
+        "args": [
+        ],
+        "required": 0
+    },
+    "staff_remove_teacher": {
+        "args": [
+            "p_user"
+        ],
+        "required": 1
+    },
+    "teacher_save_profile": {
+        "args": [
+            "p_name",
+            "p_bio",
+            "p_photo"
         ],
         "required": 1
     },
