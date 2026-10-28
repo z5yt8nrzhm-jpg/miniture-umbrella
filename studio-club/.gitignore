@@ -1,0 +1,9 @@
+# Local and build output
+/build/
+.dart_tool/
+.flutter-plugins*
+*.iml
+.gradle/
+local.properties
+.env
+# Real keys never go in git. Pass them with --dart-define (see README).

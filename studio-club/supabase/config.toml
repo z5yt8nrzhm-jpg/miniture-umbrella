@@ -1,0 +1,49 @@
+# Local settings for the Supabase CLI (`supabase start`). The hosted project
+# has its own copies of the auth settings; the README lists what to set there.
+
+project_id = "gilbert-flex-club"
+
+[api]
+port = 54321
+schemas = ["public"]
+extra_search_path = ["public", "extensions"]
+# Nothing in the club needs more than a page of rows at a time.
+max_rows = 100
+
+[db]
+port = 54322
+# Match the hosted project. Check with: show server_version;
+major_version = 17
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+# If a phone sends a refresh and the reply is lost, the retry still works for
+# this many seconds instead of signing the member out.
+refresh_token_reuse_interval = 10
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+enable_confirmations = false
+max_frequency = "60s"
+otp_length = 6
+otp_expiry = 3600
+
+# Members sign in with a 6-digit code typed into the app, not a link: email
+# scanners open links first and use them up. The "magic link" email is the one
+# Supabase sends for passwordless sign-in, so that is the one we rewrite.
+[auth.email.template.magic_link]
+subject = "Your Gilbert Flex Studio sign-in code"
+content_path = "./supabase/templates/otp.html"
+
+[inbucket]
+# Local mailbox for testing sign-in emails at http://localhost:54324
+enabled = true
+port = 54324
