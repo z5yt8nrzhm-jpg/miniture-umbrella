@@ -46,7 +46,7 @@ jobs:
       - run: flutter test
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: '17' }
-      - name: Build the Android app (demo mode: no keys, sample data)
+      - name: "Build the Android app (demo mode, no keys, sample data)"
         run: flutter build apk --release
       - name: The Android app must be allowed to use the internet
         run: grep -q 'android.permission.INTERNET' android/app/src/main/AndroidManifest.xml
