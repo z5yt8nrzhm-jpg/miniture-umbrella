@@ -1,0 +1,12 @@
+{
+  // Gilbert Flex Studio links site: a static-assets-only Worker.
+  // The name matches the Worker already live at dry-rain-c1d4.z5yt8nrzhm.workers.dev,
+  // so deploying updates that site instead of creating a new one.
+  "name": "dry-rain-c1d4",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./public",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "single-page-application"
+  }
+}
