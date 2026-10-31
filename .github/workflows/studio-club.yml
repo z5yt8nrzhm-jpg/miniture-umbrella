@@ -1,0 +1,107 @@
+name: studio-club
+
+on:
+  push:
+    branches: [claude/studio-club]
+    paths: ['studio-club/**', '.github/workflows/studio-club.yml']
+  pull_request:
+    paths: ['studio-club/**', '.github/workflows/studio-club.yml']
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: studio-club
+
+jobs:
+  database:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env: { POSTGRES_PASSWORD: postgres }
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      PGHOST: localhost
+      PGUSER: postgres
+      PGPASSWORD: postgres
+    steps:
+      - uses: actions/checkout@v4
+      - name: Privacy, flows, concurrency and volume checks
+        # The crowd test floods a 2-core shared runner with 80 phones, so its
+        # queueing is slower than real hardware (about 4x). Keep the strict
+        # 250 ms default locally; allow 750 ms here.
+        env:
+          VOLUME_P95_MS: '750'
+        run: ./supabase/tests/run.sh
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Notification emails (escaping, no header tricks)
+        run: node --experimental-strip-types supabase/functions/notify/email.test.ts
+      - name: The app's list of database functions matches the migrations
+        run: |
+          ./supabase/tests/dump_contract.sh
+          git diff --exit-code -- test/contract/rpc_contract.json
+
+  app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, cache: true }
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - name: "Build the Android app (demo mode, no keys, sample data)"
+        run: flutter build apk --release
+      - name: The Android app must be allowed to use the internet
+        run: grep -q 'android.permission.INTERNET' android/app/src/main/AndroidManifest.xml
+      - uses: actions/upload-artifact@v4
+        with: { name: gilbert-flex-club-apk, path: studio-club/build/app/outputs/flutter-apk/app-release.apk }
+
+  browser:
+    # Real browser at phone size, real Postgres, a stand-in for Supabase's web
+    # layer that can drop, delay and lose replies. See e2e/server.cjs. Runs the
+    # app (e2e.cjs), the public links page (site.cjs) and the staff desk (desk.cjs).
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env: { POSTGRES_PASSWORD: postgres }
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      PGHOST: localhost
+      PGUSER: postgres
+      PGPASSWORD: postgres
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, cache: true }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: flutter pub get
+      - run: >-
+          flutter build web --release --no-web-resources-cdn
+          --dart-define=SUPABASE_URL=http://127.0.0.1:54321
+          --dart-define=SUPABASE_KEY=sb_publishable_local
+          --output build/web-e2e
+      - working-directory: studio-club/e2e
+        run: |
+          npm install
+          npx playwright install --with-deps chromium
+          ./setup.sh
+          (nohup node server.cjs > server.log 2>&1 &)
+          (cd ../build/web-e2e && nohup python3 -m http.server 8767 > /dev/null 2>&1 &)
+          sleep 3
+          node e2e.cjs
+          (cd ../schedule && nohup python3 -m http.server 8768 > /dev/null 2>&1 &)
+          sleep 1
+          node site.cjs
+          node desk.cjs
+      - if: failure()
+        run: cat e2e/server.log || true

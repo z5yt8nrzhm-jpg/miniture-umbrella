@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Studio desk · Gilbert Flex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@1,400;1,500&family=Poppins:wght@300;400;500&display=swap">
+<style>
+:root{--bg:#F6F3EC;--card:#FBF9F4;--card2:#F1ECE2;--line:#E2DCD1;--ink:#5D625B;--deep:#3E443E;--muted:#7A7E77;--clay:#A8714F;--sage:#B9C2B2;--blush:#EBD9CB;--onink:#FBF9F4;--bad:#9a4b3a;
+  --serif:"Lora",Georgia,serif;--sans:"Poppins","Avenir Next","Segoe UI",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#22261F;--card:#2B3028;--card2:#323830;--line:#3E443B;--ink:#E4E1D8;--deep:#F1EEE6;--muted:#AEB1A7;--clay:#D7A07B;--sage:#7F8B78;--blush:#4A3D35;--onink:#22261F;--bad:#e4a08f;color-scheme:dark}}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--deep);font:15px/1.55 var(--sans)}
+.wrap{max-width:880px;margin:0 auto;padding:16px max(16px,env(safe-area-inset-right)) 60px max(16px,env(safe-area-inset-left))}
+h1{margin:0;font:italic 500 30px/1.1 var(--serif);color:var(--ink)}
+h2{margin:0 0 8px;font:italic 500 22px/1.2 var(--serif);color:var(--ink)}
+h3{margin:0;font-weight:500;font-size:15px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.who{font-size:13px;color:var(--muted)}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;scrollbar-width:none}
+.tab{flex:none;border:1px solid var(--line);background:var(--card);color:var(--deep);border-radius:999px;padding:8px 14px;font:500 13px var(--sans);cursor:pointer}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--onink);border-color:var(--ink)}
+.badge{display:inline-block;min-width:18px;padding:0 5px;margin-left:6px;border-radius:9px;background:var(--clay);color:var(--onink);font-size:11px;line-height:18px;text-align:center}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sp{flex:1}
+.muted{color:var(--muted);font-size:13px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--ink);color:var(--onink);border:0;border-radius:999px;padding:10px 16px;font:500 14px var(--sans);cursor:pointer;min-height:44px}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.btn.small{min-height:36px;padding:6px 12px;font-size:13px}
+.btn.danger{background:transparent;color:var(--bad);border:1.5px solid var(--bad)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn:focus-visible,.tab:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--clay);outline-offset:2px}
+.chip{display:inline-block;font-size:12px;border-radius:999px;padding:2px 10px;background:var(--card2)}
+.chip.new{background:var(--blush);color:var(--clay)}.chip.published,.chip.done,.chip.approved,.chip.posted{background:var(--sage);color:var(--deep)}.chip.rejected,.chip.spam{background:var(--blush);color:var(--bad)}
+form{display:flex;flex-direction:column;gap:12px}
+label{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:500}
+label.inline{flex-direction:row;align-items:center;gap:8px;font-weight:400}
+label.inline input{width:auto}
+input,textarea,select{font:400 15px var(--sans);color:var(--deep);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%}
+textarea{min-height:140px;resize:vertical}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+dl{margin:8px 0 0;display:grid;grid-template-columns:max-content 1fr;gap:2px 12px;font-size:14px}dt{color:var(--muted)}dd{margin:0;overflow-wrap:anywhere}
+table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);max-width:92vw;background:var(--ink);color:var(--onink);padding:10px 16px;border-radius:12px;font-size:14px;z-index:9}
+#toast.err{background:var(--bad);color:#fff}
+.center{max-width:420px;margin:12vh auto 0}
+.qrbox{background:#fff;border-radius:12px;padding:10px;display:inline-block;line-height:0}.qrbox svg{width:min(78vw,320px);height:auto;display:block}
+@media print{body *{visibility:hidden}#qrprint,#qrprint *{visibility:visible}#qrprint{position:absolute;left:0;top:0;width:100%;text-align:center}.qrbox svg{width:12cm}}
+</style></head>
+<body>
+<div class="wrap" id="app"></div>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+<script src="vendor/qrcode.js"></script>
+<script id="gfs-config">window.GFS=window.GFS||{url:"",key:""};</script>
+<script>
+(function(){
+"use strict";
+var CFG=window.GFS||{}, app=document.getElementById("app"), toastEl=document.getElementById("toast"), toastT=null;
+var S={session:null,role:null,tab:null,counts:null,editing:null};
+
+/* ---------- tiny helpers ---------- */
+function h(tag,attrs){
+  var el=document.createElement(tag); attrs=attrs||{};
+  Object.keys(attrs).forEach(function(k){var v=attrs[k];if(v==null||v===false)return;
+    if(k==="class")el.className=v; else if(k==="text")el.textContent=v; else if(k.slice(0,2)==="on")el.addEventListener(k.slice(2),v); else if(v===true)el.setAttribute(k,""); else el.setAttribute(k,v)});
+  for(var i=2;i<arguments.length;i++){var c=arguments[i];if(c==null||c===false)continue;if(Array.isArray(c))c.forEach(function(x){if(x!=null&&x!==false)el.append(x)});else el.append(c)}
+  return el;
+}
+function put(el){var out=[];(function add(a){a.forEach(function(x){if(Array.isArray(x))add(x);else if(x!=null&&x!==false)out.push(x)})})([].slice.call(arguments,1));el.replaceChildren.apply(el,out)}
+function toast(msg,bad){toastEl.textContent=msg;toastEl.className=bad?"err":"";toastEl.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){toastEl.hidden=true},bad?6000:2600)}
+function uuid(){try{return crypto.randomUUID()}catch(e){return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(c){var r=Math.random()*16|0;return(c==="x"?r:(r&3|8)).toString(16)})}}
+function keep(k,v){try{if(v==null)localStorage.removeItem(k);else localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function recall(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
+var PHX="America/Phoenix";
+function phxLocal(iso){return iso?new Intl.DateTimeFormat("sv-SE",{timeZone:PHX,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).format(new Date(iso)).replace(" ","T"):""}
+function fromPhx(v){return v?v+":00-07:00":null}   /* Phoenix has no daylight saving: always UTC-7 */
+function niceDate(iso){return iso?new Intl.DateTimeFormat("en-US",{timeZone:PHX,weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}).format(new Date(iso)):""}
+function copyText(t,msg){try{navigator.clipboard.writeText(t).then(function(){toast(msg||"copied")},function(){toast("couldn't copy, select it by hand",true)})}catch(e){toast("couldn't copy, select it by hand",true)}}
+function csvCell(v){v=String(v==null?"":v);if(/^[=+\-@\t\r]/.test(v))v="'"+v;return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}   /* leading = + - @ would run as a formula in a spreadsheet */
+var KIND={event_request:"event request",partner_request:"partner request",signup:"list sign-up",event_signup:"event sign-up"};
+
+/* ---------- sign-in and calls ---------- */
+function keyHeaders(extra){var o={apikey:CFG.key,"content-type":"application/json"};for(var k in extra)o[k]=extra[k];return o}
+function setSession(j){S.session={access_token:j.access_token,refresh_token:j.refresh_token,expires_at:j.expires_at||Math.floor(Date.now()/1000)+(j.expires_in||3600)};keep("gfs_desk_session",S.session)}
+var refreshing=null;
+function refresh(){
+  if(refreshing)return refreshing;
+  refreshing=fetch(CFG.url+"/auth/v1/token?grant_type=refresh_token",{method:"POST",headers:keyHeaders(),body:JSON.stringify({refresh_token:S.session&&S.session.refresh_token})})
+    .then(function(r){if(!r.ok){var e=new Error("auth");e.auth=true;throw e}return r.json()}).then(setSession)
+    .finally(function(){refreshing=null});
+  return refreshing;
+}
+function netErr(e){var x=new Error("net");x.net=true;x.cause=e;return x}
+function rpc(name,args,again){
+  if(!S.session){var e0=new Error("auth");e0.auth=true;return Promise.reject(e0)}
+  var soon=S.session.expires_at*1000-Date.now()<30000;
+  return (soon?refresh():Promise.resolve()).then(function(){
+    return fetch(CFG.url+"/rest/v1/rpc/"+name,{method:"POST",headers:keyHeaders({authorization:"Bearer "+S.session.access_token}),body:JSON.stringify(args||{})}).catch(function(e){throw netErr(e)});
+  }).then(function(r){
+    if(r.status===401&&again!==false)return refresh().then(function(){return rpc(name,args,false)});
+    return r.text().then(function(t){var j=null;try{j=t?JSON.parse(t):null}catch(e){}
+      if(!r.ok){var er=new Error((j&&j.message)||("http "+r.status));er.status=r.status;er.code=j&&j.message;if(r.status===401)er.auth=true;if(r.status>=500||(j===null&&r.status!==401))er.net=true;throw er}
+      if(j===null&&t&&!/^\s*null\s*$/.test(t)){var e2=new Error("not json");e2.net=true;throw e2}   /* a hotel wifi login page, not our server */
+      return j});
+  });
+}
+function fail(e){
+  if(e&&e.auth){signOutLocal("your session ended. please sign in again.");return}
+  if(e&&e.net){toast("can't reach the server right now. nothing was lost, tap again in a moment.",true);return}
+  if(e&&(e.code==="not_staff"||e.code==="not_writer"||e.code==="not_teacher")){toast("that's not available for your login.",true);return}
+  toast("something went wrong. please try again.",true);
+}
+function signOutLocal(msg){S.session=null;S.role=null;keep("gfs_desk_session",null);renderLogin(msg)}
+function signOut(){var t=S.session&&S.session.access_token;if(t)fetch(CFG.url+"/auth/v1/logout",{method:"POST",headers:keyHeaders({authorization:"Bearer "+t})}).catch(function(){});signOutLocal()}
+
+/* ---------- login ---------- */
+function renderLogin(msg,email){
+  var step=email?"code":"email",err=h("p",{class:"muted",role:"alert",text:msg||"",hidden:!msg});
+  var f=h("form",{onsubmit:function(ev){
+    ev.preventDefault();var btn=f.querySelector("button[type=submit]");btn.disabled=true;err.hidden=true;
+    if(step==="email"){
+      var em=f.elements.email.value.trim().toLowerCase();
+      fetch(CFG.url+"/auth/v1/otp",{method:"POST",headers:keyHeaders(),body:JSON.stringify({email:em,create_user:true})}).then(function(r){
+        if(!r.ok)throw new Error("otp");renderLogin("we emailed you a 6-digit code.",em)}).catch(function(){btn.disabled=false;err.textContent="couldn't send the code. check the address and try again.";err.hidden=false});
+    }else{
+      var code=f.elements.code.value.replace(/\D/g,"");
+      fetch(CFG.url+"/auth/v1/verify",{method:"POST",headers:keyHeaders(),body:JSON.stringify({type:"email",email:email,token:code})}).then(function(r){
+        if(!r.ok)throw new Error("bad");return r.json()}).then(function(j){setSession(j);boot()}).catch(function(){btn.disabled=false;err.textContent="that code didn't work. check it, or ask for a new one.";err.hidden=false});
+    }
+  }},
+    step==="email"?h("label",{},"your email",h("input",{name:"email",type:"email",autocomplete:"email",required:true})):h("label",{},"6-digit code",h("input",{name:"code",inputmode:"numeric",autocomplete:"one-time-code",maxlength:"8",required:true})),
+    h("button",{class:"btn",type:"submit",text:step==="email"?"email me a code":"sign in"}),
+    step==="code"?h("button",{class:"btn ghost",type:"button",onclick:function(){renderLogin()},text:"use a different email"}):null);
+  put(app,h("div",{class:"center"},h("h1",{text:"studio desk"}),h("p",{class:"muted",text:"for the Gilbert Flex team and teachers."}),err,f));
+}
+
+/* ---------- shell ---------- */
+var TABS={inbox:"Inbox",events:"Events",journal:"Journal",teachers:"Teachers",social:"Social",audience:"Audience",profile:"My profile"};
+function tabsFor(r){return r.staff?["inbox","events","journal","teachers","social","audience"]:r.teacher?["journal","profile"]:[]}
+function renderShell(){
+  var tabs=tabsFor(S.role);
+  if(!tabs.length){put(app,h("div",{class:"center"},h("h1",{text:"you're signed in"}),h("p",{class:"muted",text:"but this desk is for the studio team and teachers. ask the studio to add you as a teacher using this email, then come back."}),h("button",{class:"btn ghost",onclick:signOut,text:"sign out"})));return}
+  if(tabs.indexOf(S.tab)<0)S.tab=tabs[0];
+  var bar=h("div",{class:"tabs",role:"tablist"},tabs.map(function(t){
+    var b=h("button",{class:"tab",role:"tab","aria-selected":String(t===S.tab),onclick:function(){S.tab=t;S.editing=null;renderShell()}},TABS[t]);
+    if(t==="inbox"&&S.counts&&S.counts.new>0)b.append(h("span",{class:"badge",text:String(S.counts.new)}));return b}));
+  var main=h("main",{id:"main"});
+  put(app,h("div",{class:"top"},h("h1",{text:"studio desk"}),h("div",{class:"row"},h("span",{class:"who",text:(S.role.name||"")+(S.role.staff?" · team":" · teacher")}),h("button",{class:"btn ghost small",onclick:signOut,text:"sign out"}))),bar,main);
+  VIEW[S.tab](main);
+}
+var VIEW={};
+function loading(main){put(main,h("p",{class:"muted",text:"loading..."}))}
+function loadFail(main,e,retry){if(e&&e.auth){fail(e);return}put(main,h("div",{class:"card"},h("p",{text:e&&e.net?"can't reach the server right now.":"couldn't load this."}),h("button",{class:"btn small",onclick:retry,text:"try again"})))}
+
+/* ---------- inbox ---------- */
+var inboxFilter={status:"new"};
+VIEW.inbox=function(main){
+  loading(main);
+  Promise.all([rpc("staff_inbox",{p_status:inboxFilter.status==="all"?null:inboxFilter.status,p_limit:100}),rpc("staff_inbox_counts")]).then(function(r){
+    var list=r[0]||[];S.counts=r[1];
+    var sel=h("select",{"aria-label":"show",onchange:function(){inboxFilter.status=sel.value;VIEW.inbox(main)}},["new","seen","done","spam","all"].map(function(s){return h("option",{value:s,selected:s===inboxFilter.status,text:s})}));
+    put(main,h("div",{class:"row",style:"margin-bottom:10px"},h("label",{class:"inline"},"show",sel),h("span",{class:"sp"}),h("button",{class:"btn ghost small",onclick:function(){VIEW.inbox(main)},text:"refresh"})),
+      list.length?list.map(leadCard):h("p",{class:"muted",text:"nothing here. when someone fills in a form, it lands here."}));
+    setBadge();
+  }).catch(function(e){loadFail(main,e,function(){VIEW.inbox(main)})});
+};
+function setBadge(){var t=document.querySelector(".tab");if(!t||t.textContent.indexOf("Inbox")!==0)return;var b=t.querySelector(".badge");if(b)b.remove();if(S.counts&&S.counts.new>0)t.append(h("span",{class:"badge",text:String(S.counts.new)}))}
+function leadCard(l){
+  var c=l.contact||"",isMail=c.indexOf("@")>0;
+  var det=h("dl");Object.keys(l.fields||{}).forEach(function(k){det.append(h("dt",{text:k}),h("dd",{text:String(l.fields[k])}))});
+  var note=h("input",{placeholder:"note (optional)","aria-label":"note",value:l.note||""});
+  function mark(s){return h("button",{class:"btn ghost small",onclick:function(ev){ev.currentTarget.disabled=true;rpc("staff_lead_set",{p_lead:l.id,p_status:s,p_note:note.value}).then(function(){toast("marked "+s);VIEW.inbox(document.getElementById("main"))}).catch(function(e){ev.currentTarget.disabled=false;fail(e)})},text:s==="new"?"back to new":"mark "+s})}
+  return h("div",{class:"card"},
+    h("div",{class:"row"},h("h3",{text:l.name}),h("span",{class:"chip "+l.status,text:l.status}),h("span",{class:"chip",text:KIND[l.kind]||l.kind}),l.event_title?h("span",{class:"chip",text:l.event_title}):null,l.source?h("span",{class:"chip",text:"from "+l.source}):null,h("span",{class:"sp"}),h("span",{class:"muted",text:niceDate(l.created_at)})),
+    h("div",{class:"row",style:"margin-top:6px"},h("a",{href:isMail?"mailto:"+encodeURIComponent(c).replace("%40","@"):"tel:"+c.replace(/[^\d+]/g,""),text:c}),h("button",{class:"btn ghost small",onclick:function(){copyText(c)},text:"copy"}),
+      h("span",{class:"muted",text:l.unsubscribed?"unsubscribed":l.consent?"ok to email news":"no news emails"})),
+    det,h("div",{class:"row",style:"margin-top:10px"},note,l.status!=="seen"?mark("seen"):null,l.status!=="done"?mark("done"):null,l.status!=="spam"?mark("spam"):mark("new")));
+}
+
+/* ---------- QR codes ---------- */
+function qrSvg(text){
+  var qr=qrcode(0,"M");qr.addData(text);qr.make();
+  var n=qr.getModuleCount(),q=4,d="",NS="http://www.w3.org/2000/svg";
+  for(var r=0;r<n;r++)for(var c=0;c<n;c++)if(qr.isDark(r,c))d+="M"+(c+q)+" "+(r+q)+"h1v1h-1z";
+  var svg=document.createElementNS(NS,"svg");svg.setAttribute("viewBox","0 0 "+(n+2*q)+" "+(n+2*q));svg.setAttribute("xmlns",NS);svg.setAttribute("shape-rendering","crispEdges");svg.setAttribute("role","img");svg.setAttribute("aria-label","QR code for "+text);
+  var bg=document.createElementNS(NS,"rect");bg.setAttribute("width",n+2*q);bg.setAttribute("height",n+2*q);bg.setAttribute("fill","#fff");
+  var pa=document.createElementNS(NS,"path");pa.setAttribute("d",d);pa.setAttribute("fill","#000");
+  svg.append(bg,pa);return svg;
+}
+function showQr(main,title,url,back){
+  var svg=qrSvg(url);
+  put(main,h("div",{class:"row",style:"margin-bottom:10px"},h("button",{class:"btn ghost small",onclick:back,text:"‹ back"}),h("h2",{style:"margin:0",text:"QR code"})),
+    h("div",{id:"qrprint",class:"card",style:"text-align:center"},h("h3",{style:"margin-bottom:8px",text:title}),h("div",{class:"qrbox",id:"qrbox"},svg),h("p",{class:"muted",style:"overflow-wrap:anywhere",text:url})),
+    h("div",{class:"row"},h("button",{class:"btn small",onclick:function(){window.print()},text:"print"}),
+      h("button",{class:"btn ghost small",onclick:function(){var a=h("a",{href:URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svg)],{type:"image/svg+xml"})),download:"qr-"+title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+".svg"});document.body.append(a);a.click();a.remove()},text:"download image (SVG)"}),
+      h("button",{class:"btn ghost small",onclick:function(){copyText(url,"link copied")},text:"copy link"})),
+    h("p",{class:"muted",text:"anyone who scans this lands on the page, and their sign-up is tagged with where they came from."}));
+}
+function slugSrc(t){return (t||"x").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,30)||"x"}
+
+/* ---------- events ---------- */
+VIEW.events=function(main){
+  loading(main);
+  rpc("staff_events").then(function(list){
+    list=list||[];
+    put(main,h("div",{class:"row",style:"margin-bottom:10px"},h("h2",{text:"events"}),h("span",{class:"sp"}),h("button",{class:"btn ghost small",onclick:function(){showQr(main,"Gilbert Flex links page",pageBase()+"?src=qr_flyer",function(){VIEW.events(main)})},text:"QR for the links page"}),h("button",{class:"btn small",onclick:function(){eventForm(main,null)},text:"new event"})),
+      list.length?list.map(function(e){return eventCard(main,e)}):h("p",{class:"muted",text:"no events yet. add one and it appears on the public calendar once published."}));
+  }).catch(function(e){loadFail(main,e,function(){VIEW.events(main)})});
+};
+function pageBase(){return location.origin+location.pathname.replace(/[^/]*$/,"")+"index.html"}
+function eventCard(main,e){
+  var link=pageBase()+"?src=qr_"+encodeURIComponent((e.title||"event").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,30))+"#event="+e.id;
+  return h("div",{class:"card"},
+    h("div",{class:"row"},h("h3",{text:e.title}),h("span",{class:"chip "+(e.published?"published":""),text:e.published?"published":"hidden"}),h("span",{class:"sp"}),h("span",{class:"muted",text:niceDate(e.starts_at)})),
+    h("p",{class:"muted",text:[e.price,e.spots?e.signups+" of "+e.spots+" spots taken":e.signups+" signed up",e.attended?e.attended+" came":null,e.host?"with "+e.host:null].filter(Boolean).join(" · ")}),
+    h("div",{class:"row"},h("button",{class:"btn ghost small",onclick:function(){eventForm(main,e)},text:"edit"}),h("button",{class:"btn ghost small",onclick:function(){signups(main,e)},text:"sign-ups"}),
+      h("button",{class:"btn ghost small",onclick:function(){showQr(main,e.title,link,function(){VIEW.events(main)})},text:"QR code"}),
+      h("button",{class:"btn ghost small",onclick:function(){copyText(link,"link copied. put it in a story or a message.")},text:"copy sign-up link"}),
+      h("button",{class:"btn danger small",onclick:function(){if(!confirm("Delete this event? If people signed up it will only be hidden."))return;rpc("staff_delete_event",{p_id:e.id}).then(function(r){toast(r.status==="hidden"?"hidden (people had signed up)":"deleted");VIEW.events(main)}).catch(fail)},text:"delete"})));
+}
+function eventForm(main,e){
+  e=e||{};
+  var f=h("form",{onsubmit:function(ev){
+    ev.preventDefault();var q=f.elements,btn=f.querySelector("button[type=submit]");btn.disabled=true;
+    rpc("staff_save_event",{p_id:e.id||null,p_title:q.title.value,p_blurb:q.blurb.value,p_starts:fromPhx(q.starts.value),p_ends:fromPhx(q.ends.value),p_location:q.location.value||null,p_price:q.price.value||null,
+      p_spots:q.spots.value?parseInt(q.spots.value,10):null,p_booking_url:q.url.value||null,p_host:q.host.value||null,p_published:q.published.checked}).then(function(r){
+      btn.disabled=false;if(r.status!=="ok"){toast("please check the title, date and link (links start with https://).",true);return}toast("saved");VIEW.events(main)}).catch(function(x){btn.disabled=false;fail(x)});
+  }},
+    h("label",{},"title",h("input",{name:"title",required:true,maxlength:"80",value:e.title||""})),
+    h("div",{class:"grid2"},h("label",{},"starts (Gilbert time)",h("input",{name:"starts",type:"datetime-local",required:true,value:phxLocal(e.starts_at)})),h("label",{},"ends (optional)",h("input",{name:"ends",type:"datetime-local",value:phxLocal(e.ends_at)}))),
+    h("div",{class:"grid2"},h("label",{},"price",h("input",{name:"price",maxlength:"40",placeholder:"$25",value:e.price||""})),h("label",{},"spots (blank = no limit)",h("input",{name:"spots",type:"number",min:"1",max:"500",value:e.spots||""}))),
+    h("div",{class:"grid2"},h("label",{},"host",h("input",{name:"host",maxlength:"60",value:e.host||""})),h("label",{},"where",h("input",{name:"location",maxlength:"120",placeholder:"Gilbert Flex Studio",value:e.location&&e.location!=="Gilbert Flex Studio"?e.location:""}))),
+    h("label",{},"booking link (optional, https://)",h("input",{name:"url",type:"url",value:e.booking_url||""})),
+    h("label",{},"about it",h("textarea",{name:"blurb",maxlength:"600"},e.blurb||"")),
+    h("label",{class:"inline"},h("input",{name:"published",type:"checkbox",checked:!!e.published}),"show on the public calendar"),
+    h("div",{class:"row"},h("button",{class:"btn",type:"submit",text:"save"}),h("button",{class:"btn ghost",type:"button",onclick:function(){VIEW.events(main)},text:"cancel"})));
+  put(main,h("h2",{text:e.id?"edit event":"new event"}),f);
+}
+function signups(main,e){
+  loading(main);
+  rpc("staff_event_signups",{p_event:e.id}).then(function(list){
+    list=list||[];
+    put(main,h("div",{class:"row",style:"margin-bottom:10px"},h("button",{class:"btn ghost small",onclick:function(){VIEW.events(main)},text:"‹ events"}),h("h2",{style:"margin:0",text:e.title})),
+      h("p",{class:"muted",text:"tick people off as they arrive. this is how we learn which sources bring people who actually come."}),
+      list.length?h("div",{class:"card"},h("table",{},h("tbody",{},list.map(function(s){
+        var cb=h("input",{type:"checkbox","aria-label":"came: "+s.name,checked:!!s.attended,onchange:function(){cb.disabled=true;rpc("staff_mark_attended",{p_lead:s.id,p_attended:cb.checked}).then(function(){cb.disabled=false}).catch(function(x){cb.checked=!cb.checked;cb.disabled=false;fail(x)})}});
+        return h("tr",{},h("td",{},cb),h("td",{text:s.name}),h("td",{text:s.contact}),h("td",{text:s.status==="spam"?"removed":""}),h("td",{},h("button",{class:"btn ghost small",onclick:function(){rpc("staff_lead_set",{p_lead:s.id,p_status:s.status==="spam"?"seen":"spam"}).then(function(){signups(main,e)}).catch(fail)},text:s.status==="spam"?"restore":"remove"})))}))))
+        :h("p",{class:"muted",text:"nobody yet."}));
+  }).catch(function(x){loadFail(main,x,function(){signups(main,e)})});
+}
+
+/* ---------- journal ---------- */
+VIEW.journal=function(main){
+  loading(main);
+  rpc("my_posts").then(function(list){
+    list=list||[];
+    put(main,h("div",{class:"row",style:"margin-bottom:10px"},h("h2",{text:S.role.staff?"all posts":"my posts"}),h("span",{class:"sp"}),h("button",{class:"btn small",onclick:function(){postForm(main,null)},text:"write a post"})),
+      list.length?list.map(function(p){
+        var need=S.role.staff&&p.status==="submitted";
+        return h("div",{class:"card"},h("div",{class:"row"},h("h3",{text:p.title}),h("span",{class:"chip "+p.status,text:p.status==="submitted"?"waiting for review":p.status}),h("span",{class:"sp"}),h("span",{class:"muted",text:(S.role.staff?p.author+" · ":"")+niceDate(p.updated_at)})),
+          p.review_note?h("p",{class:"muted",text:"note from the studio: "+p.review_note}):null,
+          h("div",{class:"row",style:"margin-top:8px"},h("button",{class:"btn ghost small",onclick:function(){postForm(main,p.id)},text:need?"read + review":"open"}),
+            p.status==="published"?h("a",{class:"btn ghost small",href:pageBase()+"#post="+encodeURIComponent(p.slug),target:"_blank",rel:"noopener",text:"view on the site"}):null))
+      }):h("p",{class:"muted",text:"no posts yet. a first one could be 'meet our new teacher'."}));
+  }).catch(function(e){loadFail(main,e,function(){VIEW.journal(main)})});
+};
+var KINDS={post:"a story",teacher_of_week:"teacher of the week",event_of_week:"event of the week"};
+function postForm(main,id){
+  var go=id?rpc("post_get",{p_id:id}):Promise.resolve({});
+  loading(main);
+  go.then(function(p){
+    if(p===null){toast("couldn't open that post.",true);VIEW.journal(main);return}
+    p=p||{};var cid=uuid(),sid=p.id||null;
+    var locked=p.status==="published"&&!S.role.staff, ro=locked;
+    var f=h("form",{onsubmit:function(ev){ev.preventDefault()}},
+      h("label",{},"kind",h("select",{name:"kind",disabled:ro},Object.keys(KINDS).map(function(k){return h("option",{value:k,selected:(p.kind||"post")===k,text:KINDS[k]})}))),
+      h("label",{},"title",h("input",{name:"title",maxlength:"100",required:true,value:p.title||"",disabled:ro})),
+      h("label",{},"story (leave a blank line between paragraphs)",h("textarea",{name:"body",style:"min-height:260px",maxlength:"20000",disabled:ro},p.body||"")),
+      h("label",{},"cover photo link (optional, https://)",h("input",{name:"cover",type:"url",value:p.cover_url||"",disabled:ro})));
+    var msg=h("p",{class:"muted",text:p.status?"status: "+(p.status==="submitted"?"waiting for review":p.status)+(p.review_note?" · note: "+p.review_note:""):"a new post"});
+    function save(thenSubmit){
+      var q=f.elements;
+      return rpc("post_save",{p_client_id:cid,p_id:sid,p_kind:q.kind.value,p_title:q.title.value,p_body:q.body.value,p_cover:q.cover.value||null}).then(function(r){
+        if(r.status==="ok"){sid=r.id;return thenSubmit?rpc("post_submit",{p_id:sid}).then(function(s){return s.status==="ok"?"submitted":"bad"}):"saved"}
+        return r.status==="locked"?"locked":"invalid"});
+    }
+    function act(label,fn,cls){return h("button",{class:"btn "+(cls||""),type:"button",text:label,onclick:function(ev){var b=ev.currentTarget;b.disabled=true;fn().then(function(res){b.disabled=false;if(res==="invalid"||res==="bad"){toast("please add a title and some text (cover links start with https://).",true);return}if(res==="locked"){toast("published posts can only be changed by the studio.",true);return}
+      toast(res==="submitted"?"sent to the studio for review":res==="saved"?"draft saved":res);if(res==="submitted"||res==="published"||res==="sent back"||res==="taken down")VIEW.journal(main)}).catch(function(e){b.disabled=false;fail(e)})}})}
+    function review(dec,label,cls){return act(label,function(){
+      var note=null;if(dec==="reject"){note=prompt("A short note for the writer (what to change):");if(note===null)return Promise.resolve("cancelled")}
+      return save(false).then(function(r){if(r!=="saved")return r;return rpc("staff_review_post",{p_id:sid,p_decision:dec,p_note:note}).then(function(x){return x.status==="ok"?(dec==="publish"?"published":dec==="reject"?"sent back":"taken down"):"bad"})})},cls)}
+    var row=h("div",{class:"row"},ro?null:act("save draft",function(){return save(false)},"ghost"),
+      ro?null:(p.status==="draft"||p.status==="rejected"||!p.status)?act("send for review",function(){return save(true)}):null,
+      S.role.staff&&p.status!=="published"?review("publish","publish now"):null,
+      S.role.staff&&p.status==="submitted"?review("reject","send back with a note","ghost"):null,
+      S.role.staff&&p.status==="published"?review("unpublish","take down","danger"):null,
+      h("button",{class:"btn ghost",type:"button",onclick:function(){VIEW.journal(main)},text:"close"}));
+    put(main,h("h2",{text:p.id?"edit post":"new post"}),msg,f,row);
+  }).catch(function(e){loadFail(main,e,function(){postForm(main,id)})});
+}
+
+/* ---------- teachers (team) and my profile (teacher) ---------- */
+VIEW.teachers=function(main){
+  loading(main);
+  rpc("staff_teachers").then(function(list){
+    list=list||[];
+    var f=h("form",{onsubmit:function(ev){ev.preventDefault();var q=f.elements,btn=f.querySelector("button[type=submit]");btn.disabled=true;
+      rpc("staff_add_teacher",{p_email:q.email.value,p_name:q.name.value,p_bio:q.bio.value||null}).then(function(r){btn.disabled=false;
+        if(r.status==="ok"){toast("teacher added");VIEW.teachers(main)}else if(r.status==="no_such_user")toast("they need to open this page and sign in with that email once first.",true);else toast("please check the name and email.",true)}).catch(function(x){btn.disabled=false;fail(x)})}},
+      h("div",{class:"grid2"},h("label",{},"their email",h("input",{name:"email",type:"email",required:true})),h("label",{},"name shown on posts",h("input",{name:"name",maxlength:"40",required:true}))),
+      h("label",{},"short bio (optional)",h("textarea",{name:"bio",style:"min-height:70px",maxlength:"600"})),h("button",{class:"btn",type:"submit",text:"add teacher"}));
+    put(main,h("h2",{text:"teachers"}),h("p",{class:"muted",text:"teachers can write posts that you approve. they sign in at this page with their email first, then you add them here."}),f,h("div",{style:"height:14px"}),
+      list.map(function(t){return h("div",{class:"card"},h("div",{class:"row"},h("h3",{text:t.name}),h("span",{class:"muted",text:t.email}),h("span",{class:"sp"}),h("button",{class:"btn danger small",onclick:function(){if(confirm("Remove "+t.name+" as a teacher? Their published posts stay."))rpc("staff_remove_teacher",{p_user:t.user_id}).then(function(){VIEW.teachers(main)}).catch(fail)},text:"remove"})),t.bio?h("p",{class:"muted",text:t.bio}):null)}));
+  }).catch(function(e){loadFail(main,e,function(){VIEW.teachers(main)})});
+};
+VIEW.profile=function(main){
+  var f=h("form",{onsubmit:function(ev){ev.preventDefault();var q=f.elements,btn=f.querySelector("button[type=submit]");btn.disabled=true;
+    rpc("teacher_save_profile",{p_name:q.name.value,p_bio:q.bio.value||null,p_photo:q.photo.value||null}).then(function(r){btn.disabled=false;if(r.status==="ok"){S.role.name=q.name.value;toast("saved")}else toast("please check your name and photo link (https://).",true)}).catch(function(x){btn.disabled=false;fail(x)})}},
+    h("label",{},"name shown on posts",h("input",{name:"name",maxlength:"40",required:true,value:S.role.name||""})),
+    h("label",{},"short bio",h("textarea",{name:"bio",style:"min-height:90px",maxlength:"600"})),
+    h("label",{},"photo link (https://)",h("input",{name:"photo",type:"url"})),h("button",{class:"btn",type:"submit",text:"save"}));
+  put(main,h("h2",{text:"my profile"}),h("p",{class:"muted",text:"this is how you appear under 'meet the teachers'."}),f);
+};
+
+/* ---------- social calendar (team) ---------- */
+VIEW.social=function(main){
+  loading(main);
+  Promise.all([rpc("staff_social_list",{p_from:new Date(Date.now()-7*864e5).toISOString()}),rpc("staff_events")]).then(function(r){
+    var list=r[0]||[],events=r[1]||[];
+    put(main,h("div",{class:"row",style:"margin-bottom:10px"},h("h2",{text:"social calendar"}),h("span",{class:"sp"}),h("button",{class:"btn small",onclick:function(){socialForm(main,null,events)},text:"plan a post"})),
+      h("p",{class:"muted",text:"plan what goes out and when. posting happens in Instagram itself; tap 'mark posted' once it's out."}),
+      list.length?list.map(function(s){return h("div",{class:"card"},h("div",{class:"row"},h("h3",{text:niceDate(s.when)}),h("span",{class:"chip",text:s.kind}),h("span",{class:"chip "+s.status,text:s.status}),s.event_title?h("span",{class:"chip",text:s.event_title}):null),
+        h("p",{style:"white-space:pre-wrap;margin:8px 0",text:s.caption||"(no caption yet)"}),
+        h("div",{class:"row"},h("button",{class:"btn ghost small",onclick:function(){socialForm(main,s,events)},text:"edit"}),h("button",{class:"btn ghost small",onclick:function(){copyText(s.caption||"","caption copied")},text:"copy caption"}),
+          s.status!=="posted"?h("button",{class:"btn ghost small",onclick:function(){rpc("staff_social_save",{p_id:s.id,p_when:s.when,p_kind:s.kind,p_caption:s.caption,p_image:s.image_url,p_status:"posted"}).then(function(){VIEW.social(main)}).catch(fail)},text:"mark posted"}):null,
+          h("button",{class:"btn danger small",onclick:function(){if(confirm("Delete this planned post?"))rpc("staff_social_delete",{p_id:s.id}).then(function(){VIEW.social(main)}).catch(fail)},text:"delete"})))}):h("p",{class:"muted",text:"nothing planned yet."}));
+  }).catch(function(e){loadFail(main,e,function(){VIEW.social(main)})});
+};
+function socialForm(main,s,events){
+  s=s||{};
+  var cap=h("textarea",{name:"caption",maxlength:"2200",style:"min-height:150px"},s.caption||""),count=h("span",{class:"muted"});
+  function upd(){count.textContent=cap.value.length+" / 2200"}cap.addEventListener("input",upd);
+  var evSel=h("select",{name:"event"},[h("option",{value:"",text:"(none)"})].concat(events.map(function(e){return h("option",{value:e.id,text:e.title+" · "+niceDate(e.starts_at)})})));
+  var f=h("form",{onsubmit:function(ev){ev.preventDefault();var q=f.elements,btn=f.querySelector("button[type=submit]");btn.disabled=true;
+    rpc("staff_social_save",{p_id:s.id||null,p_when:fromPhx(q.when.value),p_kind:q.kind.value,p_caption:q.caption.value,p_image:q.image.value||null,p_status:q.status.value,p_event:q.event.value||null}).then(function(r){btn.disabled=false;
+      if(r.status==="ok"){toast("saved");VIEW.social(main)}else toast("please check the date and the image link (https://).",true)}).catch(function(x){btn.disabled=false;fail(x)})}},
+    h("div",{class:"grid2"},h("label",{},"when (Gilbert time)",h("input",{name:"when",type:"datetime-local",required:true,value:phxLocal(s.when)})),
+      h("label",{},"kind",h("select",{name:"kind"},["feed","story","reel"].map(function(k){return h("option",{value:k,selected:s.kind===k,text:k})})))),
+    h("label",{},"about which event? (optional)",evSel),
+    h("div",{},h("button",{class:"btn ghost small",type:"button",onclick:function(){
+      var e=events.filter(function(x){return x.id===evSel.value})[0];if(!e){toast("pick an event first");return}
+      cap.value=e.title+" ✨\n"+niceDate(e.starts_at)+" at Gilbert Flex Studio"+(e.price?" · "+e.price:"")+(e.spots?" · only "+e.spots+" spots":"")+(e.blurb?"\n\n"+e.blurb:"")+"\n\nsave your spot: link in bio 🔗";upd()},text:"write a starter caption from the event"})),
+    h("label",{},"caption",cap,count),
+    h("label",{},"image link (optional, https://)",h("input",{name:"image",type:"url",value:s.image_url||""})),
+    h("label",{},"status",h("select",{name:"status"},["idea","draft","approved","posted"].map(function(k){return h("option",{value:k,selected:(s.status||"idea")===k,text:k})}))),
+    h("div",{class:"row"},h("button",{class:"btn",type:"submit",text:"save"}),h("button",{class:"btn ghost",type:"button",onclick:function(){VIEW.social(main)},text:"cancel"})));
+  if(s.id&&s.event_title){var m=events.filter(function(x){return x.title===s.event_title})[0];if(m)evSel.value=m.id}
+  put(main,h("h2",{text:s.id?"edit planned post":"plan a post"}),f);upd();
+}
+
+/* ---------- audience (team) ---------- */
+VIEW.audience=function(main){
+  loading(main);
+  Promise.all([rpc("staff_events"),rpc("staff_source_report")]).then(function(r){
+    var events=r[0]||[],report=r[1]||[];
+    var seg=h("select",{name:"seg"},[["consented","everyone who said yes to news"],["recent","joined recently"],["event_signed","signed up for an event"],["event_attended","came to an event"],["partners","partners (who said yes)"]].map(function(x){return h("option",{value:x[0],text:x[1]})}));
+    var ev=h("select",{name:"ev"},events.map(function(e){return h("option",{value:e.id,text:e.title})}));
+    var days=h("input",{name:"days",type:"number",min:"1",max:"3650",value:"90","aria-label":"days"});
+    var out=h("div",{id:"audout"});
+    function run(){
+      var needEv=seg.value==="event_signed"||seg.value==="event_attended";
+      if(needEv&&!ev.value){toast("pick an event first");return}
+      rpc("staff_audience",{p_segment:seg.value,p_event:needEv?ev.value:null,p_days:parseInt(days.value,10)||90}).then(function(list){
+        if(!Array.isArray(list)){toast("couldn't build that list.",true);return}
+        var emails=list.filter(function(x){return x.email}).map(function(x){return x.email});
+        put(out,h("div",{class:"row",style:"margin:10px 0"},h("strong",{text:list.length+" people"}),h("span",{class:"sp"}),
+          h("button",{class:"btn ghost small",onclick:function(){copyText(emails.join(", "),emails.length+" emails copied")},text:"copy emails"}),
+          h("button",{class:"btn small",onclick:function(){
+            var rows=[["Name","Email","Phone","Source","Joined"]].concat(list.map(function(x){return[x.name,x.email||"",x.phone||"",x.source||"",x.created_at]}));
+            var a=h("a",{href:URL.createObjectURL(new Blob([rows.map(function(r){return r.map(csvCell).join(",")}).join("\n")],{type:"text/csv"})),download:"gilbert-flex-audience.csv"});document.body.append(a);a.click();a.remove()},text:"download for Mailchimp (CSV)"})),
+          list.length?h("div",{class:"card"},h("table",{},h("thead",{},h("tr",{},["name","contact","from","joined"].map(function(t){return h("th",{text:t})}))),h("tbody",{},list.map(function(x){return h("tr",{},h("td",{text:x.name}),h("td",{text:x.email||x.phone||""}),h("td",{text:x.source||KIND[x.kind]||""}),h("td",{text:niceDate(x.created_at)}))})))):h("p",{class:"muted",text:"nobody in this list yet."}));
+      }).catch(fail);
+    }
+    put(main,h("h2",{text:"audience"}),h("p",{class:"muted",text:"only people who ticked 'ok to send news' and haven't unsubscribed. every email you send should carry an unsubscribe link (Mailchimp adds one for you)."}),
+      h("div",{class:"card"},h("div",{class:"grid2"},h("label",{},"who",seg),h("label",{},"event (for the two event lists)",ev),h("label",{},"days (for 'recent')",days)),h("div",{class:"row",style:"margin-top:10px"},h("button",{class:"btn",onclick:run,text:"show the list"}))),out,
+      h("h2",{style:"margin-top:18px",text:"what brings people?"}),
+      report.length?h("div",{class:"card"},h("table",{},h("thead",{},h("tr",{},["source","people","event sign-ups","came"].map(function(t){return h("th",{text:t})}))),h("tbody",{},report.map(function(x){return h("tr",{},h("td",{text:x.source}),h("td",{text:String(x.leads)}),h("td",{text:String(x.event_signups)}),h("td",{text:String(x.attended)}))})))):h("p",{class:"muted",text:"add ?src=name to any link you share (a partner, a flyer QR) and it will show up here."}));
+  }).catch(function(e){loadFail(main,e,function(){VIEW.audience(main)})});
+};
+
+/* ---------- start ---------- */
+function boot(){
+  S.session=S.session||recall("gfs_desk_session");
+  if(!CFG.url||!CFG.key){put(app,h("div",{class:"center"},h("h1",{text:"studio desk"}),h("p",{class:"muted",text:"not connected yet. set the Supabase address and key at the top of this file."})));return}
+  if(!S.session){renderLogin();return}
+  rpc("my_role").then(function(r){S.role=r||{};renderShell();if(S.role.staff)rpc("staff_inbox_counts").then(function(c){S.counts=c;renderShell()}).catch(function(){})}).catch(function(e){if(e&&e.auth)signOutLocal();else{put(app,h("div",{class:"center"},h("p",{text:"can't reach the server right now."}),h("button",{class:"btn",onclick:boot,text:"try again"})))}});
+}
+setInterval(function(){if(S.role&&S.role.staff&&S.session&&!document.hidden)rpc("staff_inbox_counts").then(function(c){var changed=!S.counts||c.new!==S.counts.new;S.counts=c;if(changed&&S.tab==="inbox"&&!document.querySelector("form"))VIEW.inbox(document.getElementById("main"));else if(changed)setBadge()}).catch(function(){})},30000);
+boot();
+})();
+</script>
+</body></html>
