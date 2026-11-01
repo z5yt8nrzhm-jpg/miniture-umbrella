@@ -1,5 +1,5 @@
 {
-  "name": "gilbertflex-links",
+  "name": "gilbert-flex-studio",
   "private": true,
   "scripts": {
     "dev": "wrangler dev",
