@@ -1,0 +1,249 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Gilbert November Lookbook</title>
+<!-- November lookbook reel, final revision (v4).
+     Render:  node ../render.js november.html gilbert_november_v4.mp4
+     Stills:  node ../render.js november.html stills 0,2,4,8
+     Change dates/classes in the DATA block of the script. -->
+<style>
+@font-face{font-family:Poppins;src:url(fonts/Poppins-Medium.ttf);font-weight:500}
+@font-face{font-family:Lora;src:url(fonts/Lora.ttf);font-weight:400 700;font-style:normal}
+@font-face{font-family:Lora;src:url(fonts/Lora-Italic.ttf);font-weight:400 700;font-style:italic}
+:root{
+  --cream:#F3EDE4; --brown:#8A4A33; --rust:#A0583A; --terra:#B0714F; --ink:#4A3A32;
+  --tile:#F8DFD8; --tileLine:#E6B7AA; --white:#FFFCFA;
+}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;font-family:Poppins,sans-serif;
+  background:linear-gradient(#F1DFD3 0,#F4E9DF 520px,var(--cream) 1100px)}
+#fx{position:absolute;inset:0;pointer-events:none}
+#fxBack{position:absolute;inset:0;pointer-events:none}
+.abs{position:absolute}
+#head{left:0;right:0;top:118px;text-align:center}
+#head .k{font:500 30px Poppins;letter-spacing:12px;color:var(--terra);margin-right:-12px}
+#head .h{font:italic 500 96px/1 Lora;color:var(--brown);margin-top:6px}
+
+.card{position:absolute;left:150px;width:780px;background:#FBF7F2;border-radius:30px;
+  box-shadow:0 18px 40px rgba(120,80,50,.16)}
+.ging{position:absolute;inset:14px;border-radius:20px;overflow:hidden;background-color:#FCF1EE;
+  background-image:linear-gradient(90deg,rgba(238,186,180,.32) 50%,transparent 50%),linear-gradient(rgba(238,186,180,.32) 50%,transparent 50%);
+  background-size:30px 30px}
+.dots{height:0;border-top:3px dotted rgba(200,140,120,.45);margin:0 22px}
+
+/* calendar card */
+#cal{top:404px;height:604px}
+#banner{position:absolute;left:14px;top:14px;width:752px;height:180px;border-radius:20px 20px 0 0;overflow:hidden}
+#banner img{position:absolute;inset:0;width:100%;height:100%}
+#pages{position:absolute;left:14px;top:194px;width:752px;height:396px;perspective:1600px}
+.page{position:absolute;inset:0;border-radius:0 0 20px 20px;overflow:hidden;transform-origin:0% 0%;
+  background-color:#FCF1EE;background-image:linear-gradient(90deg,rgba(238,186,180,.32) 50%,transparent 50%),linear-gradient(rgba(238,186,180,.32) 50%,transparent 50%);background-size:30px 30px}
+.mname{text-align:center;font:500 58px/1 Lora;color:var(--brown);padding-top:16px;height:66px}
+.dow,.grid{display:grid;grid-template-columns:repeat(7,1fr);column-gap:10px;padding:0 20px}
+.dow{margin-top:10px;font:500 15px Poppins;color:#8C6B5C;text-align:center}
+.grid{grid-auto-rows:44px;row-gap:6px;margin-top:6px}
+.c{border-radius:12px;background:var(--tile);border:2px solid var(--tileLine);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font:500 25px/1 Poppins;color:var(--rust);box-sizing:border-box}
+.c small{font:500 9px/1 Poppins;letter-spacing:.6px;margin-top:3px;text-transform:uppercase;white-space:nowrap}
+.c.wt{background:var(--white);border-color:#EBD3CB;color:#6E5446}
+.c.wt small{color:#9A5F45}
+.c.ev{background:var(--rust);border-color:var(--rust);color:#FFF6F0}
+.c.ev small{color:#FBE3D6}
+.c.dim{background:transparent;border-color:transparent;color:#D9C2B8}
+.c.oct{background:var(--white);border-color:#EBD3CB;color:#6E5446}
+#legend{position:absolute;left:236px;right:20px;top:318px;display:flex;flex-wrap:wrap;justify-content:center;column-gap:22px;row-gap:2px;font:500 16px/1.25 Poppins;color:var(--ink);white-space:nowrap}
+#legend b{display:inline-block;width:11px;height:11px;border-radius:3px;background:var(--rust);margin:0 6px 1px 0;vertical-align:middle}
+#legend i{font-style:normal;color:#C29A88;margin:0 7px}
+
+/* logo badge */
+#badge{position:absolute;left:470px;top:328px;width:140px;height:140px;border-radius:50%;overflow:hidden;
+  box-shadow:0 0 0 7px #FBF7F2,0 8px 22px rgba(90,60,40,.25)}
+#badge img{width:100%;height:100%;transform:scale(1.12)}
+
+/* weekly card */
+#wk{top:1028px;height:520px}
+#wk .t{position:absolute;left:0;right:0;top:30px;text-align:center;font:italic 700 62px/1 Lora;color:var(--brown)}
+#wk .st{position:absolute;left:0;right:0;top:104px;text-align:center;font:500 17px Poppins;letter-spacing:9px;color:var(--terra);margin-right:-9px}
+#wk .dots{position:absolute;left:14px;right:14px;top:136px}
+#rows{position:absolute;left:36px;right:30px;top:150px}
+.row{display:flex;align-items:center;height:52px}
+.day{flex:none;width:74px;height:44px;border-radius:12px;background:var(--tile);border:2px solid var(--tileLine);box-sizing:border-box;
+  display:flex;align-items:center;justify-content:center;font:500 18px Poppins;letter-spacing:3px;color:var(--rust);margin-right:12px}
+.chips{display:flex;gap:7px;transform-origin:0 50%;white-space:nowrap}
+.chip{background:var(--white);border:1.5px solid #EBD3CB;border-radius:9px;padding:4px 10px 5px}
+.chip .tm{font:500 12px/1.2 Poppins;letter-spacing:1.5px;color:#9A6A52}
+.chip .nm{font:500 18px/1.25 Poppins;color:var(--ink)}
+.none{font:italic 400 24px Lora;color:#8A5A45;padding-left:4px}
+
+#cta{position:absolute;left:0;right:0;top:1574px;text-align:center}
+#cta span{display:inline-block;background:var(--brown);color:#FFF6EE;font:500 34px Poppins;letter-spacing:2px;
+  padding:20px 50px 22px;border-radius:60px;box-shadow:0 10px 24px rgba(120,60,30,.28)}
+</style></head><body>
+<canvas id="fxBack" width="1080" height="1920"></canvas>
+<div id="head" class="abs"><div class="k">NOVEMBER IS HERE</div><div class="h">save your spot</div></div>
+
+<div id="cal" class="card">
+  <div id="banner"><img id="day" src="town_day.png"><img id="dusk" src="town_dusk.png" style="opacity:0"></div>
+  <div id="pages"><div class="page" id="nov"></div><div class="page" id="oct"></div></div>
+</div>
+<div id="badge"><img src="logo.png"></div>
+
+<div id="wk" class="card"><div class="ging"></div>
+  <div class="t">every week</div><div class="st">NOVEMBER CLASS SCHEDULE</div><div class="dots"></div>
+  <div id="rows"></div>
+</div>
+<div id="cta"><span>book · link in bio</span></div>
+<canvas id="fx" width="1080" height="1920"></canvas>
+
+<script>
+// ---------------- DATA ----------------
+// Nov 1 2026 is a Sunday; Thanksgiving is Thu Nov 26.
+const NOV_MARKS = {
+  1:  ['ev', 'deep release'],
+  6:  ['ev', 'sedona retreat'],
+  15: ['ev', 'liberate'],
+  13: ['wt', 'no class'],
+  20: ['wt', 'no class'],
+  26: ['wt', 'closed'],
+  27: ['wt', 'closed'],
+};
+const LEGEND = [['1', 'Deep Release'], ['6', 'Sedona Retreat'], ['15', 'Liberate']];
+const WEEK = [   // start times only, so every day reads the same way
+  ['MON', [['4:30 PM','Mindful Movement'],['6:00 PM','Prenatal Yoga'],['7:00 PM','Restorative Yoga']]],
+  ['TUE', [['6:00 AM','Sunrise Yoga'],['9:00 AM','All Levels Yoga'],['5:00 PM','Mat Pilates'],['6:00 PM','Yin Yoga'],['6:00 PM','Intermediate Tantra']]],
+  ['WED', [['6:00 PM','Prenatal Yoga'],['6:00 PM','Restorative + Sound'],['7:00 PM','Yoga Nidra']]],
+  ['THU', [['6:00 AM','Sunrise Yoga'],['5:00 PM','Mat Pilates'],['6:00 PM','Yin Yoga']]],
+  ['FRI', null],
+  ['SAT', [['8:30 AM','All Levels Yoga'],['9:00 AM','Restorative + Sound'],['10:00 AM','Perinatal Yoga']]],
+  ['SUN', [['10:30 AM','Beginner Yoga']]],
+];
+
+// ---------------- BUILD ----------------
+const $ = id => document.getElementById(id);
+function page(el, name, first, days, prevDays, cellFor) {
+  let h = `<div class="mname">${name}</div><div class="dots"></div><div class="dow">` +
+    ['S','M','T','W','T','F','S'].map(d => `<span>${d}</span>`).join('') + '</div><div class="grid">';
+  for (let i = 0; i < first; i++) h += `<div class="c dim">${prevDays - first + 1 + i}</div>`;
+  for (let d = 1; d <= days; d++) h += cellFor(d);
+  el.innerHTML = h + '</div>';
+}
+page($('oct'), 'October', 4, 31, 30, d =>
+  d === 27 ? `<div class="c ev">27<small>mat pilates</small></div>` :
+  `<div class="c ${d >= 25 ? '' : 'oct'}">${d}</div>`);
+page($('nov'), 'November', 0, 30, 31, d => {
+  const m = NOV_MARKS[d];
+  return m ? `<div class="c ${m[0]}" data-d="${d}">${d}<small>${m[1]}</small></div>` : `<div class="c">${d}</div>`;
+});
+$('nov').insertAdjacentHTML('beforeend', '<div id="legend">' +
+  LEGEND.map(([d, n]) => `<span><b></b>Nov ${d} ${n}</span>`).join('') + '</div>');
+
+$('rows').innerHTML = WEEK.map(([d, cl]) => `<div class="row"><div class="day">${d}</div>` +
+  (cl ? `<div class="chips">${cl.map(([t, n]) => `<div class="chip"><div class="tm">${t}</div><div class="nm">${n}</div></div>`).join('')}</div>`
+      : `<div class="none">no studio classes</div>`) + '</div>').join('');
+// shrink any row that's too wide for the card (Tuesday)
+document.fonts.ready.then(() => document.querySelectorAll('.chips').forEach(c => {
+  const room = 780 - 36 - 30 - 86 - 14, w = c.scrollWidth;
+  if (w > room) c.style.transform = `scale(${room / w})`;
+}));
+
+// ---------------- MOTION ----------------
+const DURATION = 14;
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const eOut = x => 1 - Math.pow(1 - clamp(x), 3);
+const eIn = x => clamp(x) ** 2;
+const eBack = x => { x = clamp(x); const c = 1.6; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+function rnd(i) { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+
+const fx = $('fx').getContext('2d'), back = $('fxBack').getContext('2d');
+const LEAF = ['#E9A15A', '#D9845A', '#C98F5E', '#E3BE6B', '#B7835B', '#DF7F55'];
+function leaf(g, x, y, s, rot, col, puffy, flip = 1) {
+  g.save(); g.translate(x, y); g.rotate(rot); g.scale(s * flip, s);
+  g.fillStyle = col;
+  if (puffy) {             // round "tree" leaf
+    g.beginPath();
+    [[0,0,15],[-11,-6,11],[10,-8,12],[-6,10,11],[9,8,11],[0,-14,10]].forEach(([a,b,r]) => { g.moveTo(a + r, b); g.arc(a, b, r, 0, 7); });
+    g.fill(); g.strokeStyle = '#9A6A4E'; g.lineWidth = 2.2; g.beginPath(); g.moveTo(4, 6); g.lineTo(20, 24); g.stroke();
+  } else {
+    g.beginPath(); g.moveTo(-22, 0); g.quadraticCurveTo(-4, -16, 22, 0); g.quadraticCurveTo(-4, 16, -22, 0); g.fill();
+    g.strokeStyle = 'rgba(120,70,40,.45)'; g.lineWidth = 1.6; g.beginPath(); g.moveTo(-18, 0); g.lineTo(30, 4); g.stroke();
+  }
+  g.restore();
+}
+function lights(g, t) {
+  g.strokeStyle = '#C9B49A'; g.lineWidth = 2;
+  const p0 = [-20, 40], p1 = [540, 120], p2 = [1100, 40];
+  g.beginPath(); g.moveTo(...p0); g.quadraticCurveTo(...p1, ...p2); g.stroke();
+  for (let i = 0; i < 22; i++) {
+    const u = (i + .5) / 22, m = 1 - u;
+    const x = m*m*p0[0] + 2*m*u*p1[0] + u*u*p2[0], y = m*m*p0[1] + 2*m*u*p1[1] + u*u*p2[1] + 10;
+    const tw = .8 + .2 * Math.sin(t * 2.4 + i * 1.9);
+    const h = g.createRadialGradient(x, y, 0, x, y, 34);
+    h.addColorStop(0, `rgba(255,200,110,${.55 * tw})`); h.addColorStop(1, 'rgba(255,200,110,0)');
+    g.fillStyle = h; g.fillRect(x - 34, y - 34, 68, 68);
+    g.fillStyle = '#FFE0A0'; g.beginPath(); g.ellipse(x, y, 6, 8, 0, 0, 7); g.fill();
+  }
+}
+// leaves resting in the bottom corners (as in the flyer)
+const PILE = [[40,1820,1.1,.4,0,1],[95,1772,.8,1.2,4,1],[70,1868,1.2,-.3,1,1],[130,1880,.9,.6,2,0],[190,1858,.75,2.2,3,0],[250,1836,.8,-1.1,5,0],[28,1760,.7,.2,3,1],
+  [1040,1826,1.1,-.4,4,1],[985,1772,.8,.8,1,1],[1010,1880,1.1,.3,0,1],[950,1884,.9,2.6,2,0],[890,1862,.8,-.6,3,0],[830,1840,.75,1.4,5,0],[1052,1756,.7,0,1,1]];
+
+function draw(t) {
+  back.clearRect(0, 0, 1080, 1920); fx.clearRect(0, 0, 1080, 1920);
+  lights(back, t);
+  // a few leaves drift down the whole time so the hold never looks frozen
+  for (let k = 0; k < 9; k++) {
+    const per = 7 + rnd(k) * 4, p = ((t + rnd(k + 20) * per) % per) / per;
+    const x = rnd(k + 40) * 1080 + Math.sin(p * 6 + k) * 60, y = -60 + p * 2040;
+    leaf(back, x, y, .7 + rnd(k + 7) * .5, t * (1 + rnd(k)) + k, LEAF[k % 6], k % 3 === 0, Math.cos(t * 2 + k));
+  }
+  PILE.forEach(([x, y, s, r, c, puffy], i) => leaf(fx, x, y + (1 - eOut(seg(t, .2 + i * .03, 1 + i * .03))) * 120, s, r, LEAF[c], !!puffy));
+  // the gust that takes October
+  const ga = seg(t, 1.1, 1.4) * (1 - seg(t, 3.2, 3.8));
+  if (ga > 0) for (let k = 0; k < 26; k++) {
+    const st = 1.1 + rnd(k) * .9, p = seg(t, st, st + 1.6 + rnd(k + 3) * .6);
+    if (p <= 0 || p >= 1) continue;
+    const x = -80 + p * 1300 + rnd(k + 9) * 120, y = 1250 - rnd(k + 5) * 900 - p * 420 + Math.sin(p * 8 + k) * 50;
+    fx.save(); fx.globalAlpha = ga; leaf(fx, x, y, .55 + rnd(k + 11) * .6, t * (5 + k % 4) + k, LEAF[k % 6], k % 4 === 0, Math.sin(t * 9 + k)); fx.restore();
+  }
+}
+
+function render(t) {
+  // header: on screen from the first frame (no blank hook), with a soft settle
+  const h = eOut(seg(t, 0, .6));
+  $('head').style.opacity = .85 + .15 * h; $('head').style.transform = `translateY(${(1 - h) * 14}px)`;
+  const c = eOut(seg(t, 0, .7));
+  $('cal').style.transform = $('badge').style.transform = `translateY(${(1 - c) * 40}px)`;
+  $('cal').style.opacity = $('badge').style.opacity = .85 + .15 * c;
+
+  // October lifts at the bottom edge, then blows off up and to the right
+  const lift = eOut(seg(t, 1.1, 1.7)), go = eIn(seg(t, 1.5, 2.9));
+  const oct = $('oct');
+  oct.style.display = go >= 1 ? 'none' : '';
+  oct.style.transform = `translate(${go * 1150}px, ${-go * 520}px) rotate(${-go * 28 + Math.sin(t * 8) * 4 * go}deg) rotateX(${lift * 22 + go * 40}deg) rotateY(${-lift * 10}deg)`;
+  oct.style.boxShadow = `0 ${10 + 30 * lift}px ${20 + 30 * lift}px rgba(90,50,30,${.25 * lift})`;
+
+  // town banner settles into a lit-up evening
+  $('dusk').style.opacity = eOut(seg(t, 3.0, 4.2));
+
+  // events pop, then the legend
+  [1, 6, 15].forEach((d, i) => {
+    const p = seg(t, 2.9 + i * .18, 3.4 + i * .18), el = document.querySelector(`#nov [data-d="${d}"]`);
+    el.style.transform = `scale(${t < 2.9 ? 1 : .6 + .4 * eBack(p)})`;
+  });
+  $('legend').style.opacity = eOut(seg(t, 3.6, 4.2));
+
+  // weekly card rises, rows follow
+  const w = eOut(seg(t, 4.0, 4.9));
+  $('wk').style.opacity = w; $('wk').style.transform = `translateY(${(1 - w) * 90}px)`;
+  document.querySelectorAll('.row').forEach((r, i) => {
+    const p = eOut(seg(t, 4.5 + i * .12, 5.0 + i * .12));
+    r.style.opacity = p; r.style.transform = `translateX(${(1 - p) * -30}px)`;
+  });
+  const ca = eOut(seg(t, 5.9, 6.5));
+  $('cta').style.opacity = ca; $('cta').style.transform = `translateY(${(1 - ca) * 24}px) scale(${1 + .03 * Math.sin(Math.max(0, t - 6.5) * 2.4)})`;
+  draw(t);
+}
+window.render = render; window.DURATION = DURATION;
+Promise.all([document.fonts.load('500 20px Poppins'), document.fonts.load('italic 700 20px Lora'), document.fonts.load('500 20px Lora'),
+  ...[...document.images].map(i => i.decode())]).then(() => setTimeout(() => { render(0); window.ready = true; }, 50));
+if (!navigator.webdriver) { const t0 = performance.now(); (function loop() { if (window.ready) render(((performance.now() - t0) / 1000) % DURATION); requestAnimationFrame(loop); })(); }
+</script>
+</body></html>
