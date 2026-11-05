@@ -22,14 +22,23 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
+      - name: Check Cloudflare secrets are set
+        env:
+          HAS_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
+          HAS_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID != '' || vars.CLOUDFLARE_ACCOUNT_ID != '' }}
+        run: |
+          ok=true
+          if [ "$HAS_TOKEN" != "true" ]; then echo "::error::Repository secret CLOUDFLARE_API_TOKEN is missing. Add it under Settings > Secrets and variables > Actions > Secrets tab > New repository secret (not Variables, not Environments)."; ok=false; fi
+          if [ "$HAS_ACCOUNT" != "true" ]; then echo "::error::CLOUDFLARE_ACCOUNT_ID is missing. Add it as a repository secret (or variable) under Settings > Secrets and variables > Actions."; ok=false; fi
+          $ok
       - run: npm ci
       - name: Deploy
         run: npx wrangler deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || vars.CLOUDFLARE_ACCOUNT_ID }}
